@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>💖 Napolee & Fareedah</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fff5f8;
+    --card: #ffffff;
+    --pink: #f4a7c0;
+    --pink-deep: #e8799f;
+    --pink-light: #fce4ee;
+    --pink-border: #f9c6d8;
+    --text: #3d1f2d;
+    --text-soft: #9a6878;
+    --green: #4caf50;
+    --glow-pink: 0 4px 24px #f4a7c055, 0 2px 8px #f4a7c033;
+    --shadow-card: 0 4px 32px #f4a7c030, 0 1px 4px #f4a7c020;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before, body::after { content:''; position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
+  body::before { width:500px;height:500px;top:-120px;right:-120px;background:radial-gradient(circle,#fcd4e6 0%,transparent 70%);opacity:.5; }
+  body::after  { width:400px;height:400px;bottom:-100px;left:-100px;background:radial-gradient(circle,#fbe8f0 0%,transparent 70%);opacity:.45; }
+
+.screen { display:none;flex-direction:column;align-items:center;min-height:100vh;padding:28px 16px 44px;position:relative;z-index:1; }
+.screen.active { display:flex; }
+
+.logo { font-family:‘Playfair Display’,serif;font-size:clamp(1.9rem,8vw,3rem);font-weight:900;background:linear-gradient(135deg,#e8799f,#f4a7c0,#f7c5d6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.15;filter:drop-shadow(0 2px 8px #f4a7c044); }
+.logo-sub { font-size:.82rem;color:var(–text-soft);text-align:center;margin-top:5px;letter-spacing:3px;text-transform:uppercase; }
+
+.card { background:var(–card);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:26px 22px;width:100%;max-width:420px;box-shadow:var(–shadow-card); }
+.card h2 { font-size:.95rem;color:var(–pink-deep);margin-bottom:18px;text-align:center;letter-spacing:1px;font-weight:800; }
+
+.input-wrap { margin-bottom:14px; }
+.input-wrap label { display:block;font-size:.72rem;color:var(–text-soft);margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800; }
+.input-wrap input { width:100%;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:12px;padding:13px 15px;color:var(–text);font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:700;outline:none;transition:border-color .2s,box-shadow .2s; }
+.input-wrap input:focus { border-color:var(–pink-deep);box-shadow:var(–glow-pink); }
+.input-wrap input::placeholder { color:#c9a0b0; }
+
+.btn-primary { width:100%;padding:14px;border-radius:13px;border:none;background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px #e8799f44;transition:transform .15s,box-shadow .15s;letter-spacing:.5px;margin-top:6px; }
+.btn-primary:hover { box-shadow:0 6px 28px #e8799f66; }
+.btn-primary:active { transform:scale(.97); }
+.btn-primary:disabled { opacity:.45;cursor:not-allowed;transform:none; }
+.btn-ghost { width:100%;padding:12px;border-radius:13px;border:1.5px solid var(–pink-border);background:transparent;color:var(–text-soft);font-family:‘Nunito’,sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px; }
+.btn-ghost:hover { border-color:var(–pink-deep);color:var(–pink-deep); }
+
+/* LOBBY */
+#lobby { gap:20px;justify-content:center; }
+
+.role-grid { display:flex;gap:12px;margin-bottom:4px; }
+.role-btn { flex:1;padding:18px 8px;border-radius:16px;border:2px solid var(–pink-border);background:var(–pink-light);cursor:pointer;text-align:center;transition:all .25s;font-family:‘Nunito’,sans-serif; }
+.role-btn:hover, .role-btn.selected { border-color:var(–pink-deep);background:#fce4ee;box-shadow:var(–glow-pink); }
+.role-btn .re { font-size:2rem;display:block;margin-bottom:6px; }
+.role-btn .rn { font-size:.9rem;font-weight:800;color:var(–text); }
+.role-btn .rl { font-size:.7rem;color:var(–text-soft);margin-top:2px; }
+
+.room-display { background:var(–pink-light);border:2px dashed var(–pink);border-radius:14px;padding:16px;text-align:center;margin:10px 0; }
+.room-display .rd-label { font-size:.7rem;color:var(–text-soft);text-transform:uppercase;letter-spacing:2px;font-weight:800; }
+.room-display .rd-code { font-family:‘Playfair Display’,serif;font-size:2.4rem;font-weight:900;color:var(–pink-deep);letter-spacing:6px;margin:4px 0; }
+.room-display .rd-hint { font-size:.74rem;color:var(–text-soft); }
+
+.status-pill { display:inline-flex;align-items:center;gap:6px;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:50px;padding:8px 16px;font-size:.78rem;font-weight:700;color:var(–text-soft);margin:6px 0; }
+.dot { width:8px;height:8px;border-radius:50%;background:#ccc;animation:blink 1.2s ease-in-out infinite; }
+.dot.online { background:var(–green); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+/* GAME */
+#game { align-items:center;gap:13px;padding-top:16px; }
+
+.top-bar { width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px; }
+.player-tag { background:var(–card);border:1.5px solid var(–pink-border);border-radius:50px;padding:7px 14px;font-size:.78rem;font-weight:800;display:flex;align-items:center;gap:5px;box-shadow:0 2px 10px #f4a7c018; }
+.p1-tag { border-color:var(–pink-deep);color:var(–pink-deep); }
+.p2-tag { border-color:#d4a0b0;color:#c0607a; }
+.round-badge { background:var(–pink-light);border:1px solid var(–pink-border);border-radius:50px;padding:7px 13px;font-size:.74rem;color:var(–text-soft);font-weight:700; }
+
+.wheel-wrap { position:relative;width:min(86vw,310px);height:min(86vw,310px);flex-shrink:0; }
+#wheelCanvas { width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 4px 24px #f4a7c077) drop-shadow(0 2px 8px #e8799f44); }
+.wheel-pointer { position:absolute;top:-15px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:26px solid var(–pink-deep);filter:drop-shadow(0 0 5px #e8799f88);z-index:10; }
+.wheel-center { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fce4ee 60%,#f4a7c0 100%);box-shadow:0 0 14px #f4a7c077;z-index:10;display:flex;align-items:center;justify-content:center;font-size:1.25rem;border:2px solid #fff; }
+@keyframes wheelPulse { 0%,100%{filter:drop-shadow(0 4px 20px #f4a7c066) drop-shadow(0 2px 8px #e8799f33)}50%{filter:drop-shadow(0 4px 32px #f4a7c099) drop-shadow(0 2px 12px #e8799f55)} }
+#wheelCanvas.idle { animation:wheelPulse 2.5s ease-in-out infinite; }
+
+.spinning-msg { font-size:.86rem;color:var(–pink-deep);font-weight:700;text-align:center;letter-spacing:2px;display:none;animation:pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.35} }
+
+.btn-spin { width:min(86vw,310px);padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,var(–pink-deep) 0%,var(–pink) 100%);color:#fff;font-family:‘Playfair Display’,serif;font-size:1.2rem;font-weight:700;cursor:pointer;box-shadow:0 4px 24px #e8799f66,inset 0 1px 0 #ffffff40;transition:transform .15s,box-shadow .2s;letter-spacing:2px;position:relative;overflow:hidden; }
+.btn-spin::before { content:’’;position:absolute;inset:0;background:linear-gradient(135deg,#ffffff25,transparent);pointer-events:none; }
+.btn-spin:hover { box-shadow:0 6px 32px #e8799f88; }
+.btn-spin:active { transform:scale(.97); }
+.btn-spin:disabled { opacity:.45;cursor:not-allowed;transform:none;box-shadow:none; }
+
+.question-card { width:100%;max-width:480px;background:var(–card);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:20px;box-shadow:var(–shadow-card);display:none;animation:slideUp .4s cubic-bezier(.16,1,.3,1); }
+.question-card.visible { display:block; }
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+
+.q-label { font-size:.68rem;color:var(–pink-deep);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:6px; }
+.q-label::before { content:’’;display:inline-block;width:16px;height:2px;background:var(–pink);border-radius:2px; }
+.q-text { font-family:‘Playfair Display’,serif;font-size:clamp(.98rem,3.8vw,1.2rem);font-weight:700;line-height:1.45;color:var(–text);margin-bottom:16px; }
+
+.done-instruction { background:var(–pink-light);border:1px solid var(–pink-border);border-radius:11px;padding:11px 13px;margin-bottom:13px;font-size:.8rem;color:var(–text-soft);line-height:1.5;text-align:center; }
+.done-instruction strong { color:var(–pink-deep); }
+
+.btn-my-done { width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;box-shadow:0 3px 14px #e8799f44;transition:all .2s;margin-bottom:12px; }
+.btn-my-done:disabled { opacity:.4;cursor:not-allowed; }
+.btn-my-done.confirmed { background:linear-gradient(135deg,#4caf50,#81c784);box-shadow:0 3px 14px #4caf5044;pointer-events:none; }
+
+.players-status { display:flex;gap:10px;margin-bottom:11px; }
+.pstatus { flex:1;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:12px;padding:10px 8px;text-align:center;transition:all .3s; }
+.pstatus.done { border-color:#81c784;background:#f0faf0; }
+.pstatus .ps-name { font-size:.76rem;font-weight:800;color:var(–text);margin-bottom:4px; }
+.pstatus .ps-icon { font-size:1.1rem; }
+
+.reveal-section { display:none; }
+.reveal-divider { display:flex;align-items:center;gap:10px;margin:13px 0 11px; }
+.reveal-divider::before,.reveal-divider::after { content:’’;flex:1;height:1px;background:var(–pink-border); }
+.reveal-divider span { font-size:.72rem;font-weight:700;color:var(–text-soft);white-space:nowrap; }
+
+.ans-textarea { width:100%;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:11px;padding:11px 13px;color:var(–text);font-family:‘Nunito’,sans-serif;font-size:.9rem;font-weight:600;resize:none;min-height:68px;outline:none;transition:border-color .2s,box-shadow .2s; }
+.ans-textarea:focus { border-color:var(–pink-deep);box-shadow:var(–glow-pink); }
+.ans-textarea::placeholder { color:#c9a0b0; }
+.ans-label { display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px; }
+
+.result-card { width:100%;max-width:480px;background:linear-gradient(135deg,#fff0f5,#fff8fb);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:20px;display:none;animation:slideUp .4s cubic-bezier(.16,1,.3,1);box-shadow:var(–shadow-card); }
+.result-card.visible { display:block; }
+.result-q { font-family:‘Playfair Display’,serif;font-size:.92rem;color:var(–text-soft);margin-bottom:13px;font-style:italic; }
+.result-row { display:flex;gap:10px;margin-bottom:9px;align-items:flex-start; }
+.result-name { font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;min-width:80px;padding-top:3px; }
+.result-ans { flex:1;background:var(–pink-light);border:1px solid var(–pink-border);border-radius:10px;padding:10px 12px;font-size:.87rem;line-height:1.4;color:var(–text); }
+
+.history-section { width:100%;max-width:480px;margin-top:5px; }
+.history-toggle { display:flex;align-items:center;justify-content:space-between;background:var(–card);border:1.5px solid var(–pink-border);border-radius:11px;padding:11px 14px;width:100%;color:var(–text-soft);font-family:‘Nunito’,sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s; }
+.history-toggle:hover { border-color:var(–pink-deep);color:var(–pink-deep); }
+.history-list { display:none;flex-direction:column;gap:8px;margin-top:8px;max-height:38vh;overflow-y:auto;padding-right:3px; }
+.history-list::-webkit-scrollbar { width:3px; }
+.history-list::-webkit-scrollbar-thumb { background:#f4a7c055;border-radius:3px; }
+.history-item { background:var(–card);border:1.5px solid var(–pink-border);border-radius:11px;padding:12px;font-size:.79rem; }
+.history-item .h-q { color:var(–pink-deep);margin-bottom:6px;font-weight:700;font-style:italic; }
+.history-item .h-r { color:var(–text-soft);line-height:1.55; }
+.history-item .h-r b { color:var(–text); }
+
+.btn-download { width:100%;max-width:480px;padding:11px;border-radius:11px;border:1.5px solid var(–pink);background:transparent;color:var(–pink-deep);font-family:‘Nunito’,sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;display:none; }
+.btn-download:hover { background:var(–pink-light);box-shadow:var(–glow-pink); }
+.divider { width:100%;max-width:480px;height:1px;background:var(–pink-border);margin:2px 0; }
+
+.confetti-container { position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden; }
+.confetti-piece { position:absolute;width:9px;height:9px;border-radius:2px;animation:confettiFall linear forwards; }
+@keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+.waiting-overlay { position:fixed;inset:0;background:rgba(255,245,248,.93);backdrop-filter:blur(6px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px; }
+.waiting-overlay.show { display:flex; }
+.waiting-spinner { width:52px;height:52px;border-radius:50%;border:4px solid var(–pink-border);border-top-color:var(–pink-deep);animation:spin .9s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.waiting-text { font-family:‘Playfair Display’,serif;font-size:1.05rem;font-weight:700;color:var(–pink-deep);text-align:center; }
+.waiting-sub { font-size:.8rem;color:var(–text-soft);text-align:center;max-width:260px; }
+
+.error-msg { color:#c0392b;font-size:.8rem;font-weight:700;text-align:center;margin-top:8px;display:none; }
+</style>
+
+</head>
+<body>
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="waiting-overlay" id="waitingOverlay">
+  <div class="waiting-spinner"></div>
+  <div class="waiting-text" id="waitingText">Connecting…</div>
+  <div class="waiting-sub" id="waitingSub"></div>
+</div>
+
+<!-- ══════════ LOBBY ══════════ -->
+
+<div class="screen active" id="lobby">
+  <div class="logo">Napolee<br>& Fareedah 💖</div>
+  <div class="logo-sub">Your personal spin game</div>
+
+  <!-- Step 1: Choose who you are -->
+
+  <div class="card" id="roleCard">
+    <h2>✨ Who are you?</h2>
+    <div class="role-grid">
+      <div class="role-btn" id="roleNapolee" onclick="selectRole('napolee')">
+        <span class="re">🩵</span>
+        <div class="rn">Napolee</div>
+        <div class="rl">Player 1</div>
+      </div>
+      <div class="role-btn" id="roleFareedah" onclick="selectRole('fareedah')">
+        <span class="re">💗</span>
+        <div class="rn">Fareedah</div>
+        <div class="rl">Player 2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Room (Napolee) -->
+
+  <div class="card" id="createCard" style="display:none">
+    <h2>🎮 Your Game Room</h2>
+    <div class="room-display">
+      <div class="rd-label">Room Code — Share with Fareedah</div>
+      <div class="rd-code" id="myRoomCode">----</div>
+      <div class="rd-hint">She enters this on her phone to join</div>
+    </div>
+    <div style="text-align:center">
+      <div class="status-pill">
+        <div class="dot" id="partnerDot"></div>
+        <span id="partnerStatus">Waiting for Fareedah to join…</span>
+      </div>
+    </div>
+    <button class="btn-ghost" onclick="switchToJoin()">I want to join instead</button>
+  </div>
+
+  <!-- Join Room (Fareedah) -->
+
+  <div class="card" id="joinCard" style="display:none">
+    <h2>🔗 Join Napolee's Room</h2>
+    <div class="input-wrap">
+      <label>Enter Room Code</label>
+      <input type="text" id="joinCodeInput" placeholder="e.g. A7X3" maxlength="4"
+        style="text-transform:uppercase;text-align:center;font-size:1.4rem;letter-spacing:6px"
+        oninput="this.value=this.value.toUpperCase()">
+    </div>
+    <div class="error-msg" id="joinError">Room not found. Check the code!</div>
+    <button class="btn-primary" onclick="joinRoom()">Join Game 💖</button>
+    <button class="btn-ghost" onclick="switchToCreate()">Create a room instead</button>
+  </div>
+</div>
+
+<!-- ══════════ GAME ══════════ -->
+
+<div class="screen" id="game">
+
+  <div class="top-bar">
+    <div class="player-tag p1-tag">🩵 Napolee</div>
+    <div class="round-badge">Round <span id="roundNum">1</span></div>
+    <div class="player-tag p2-tag">💗 Fareedah</div>
+  </div>
+
+  <div class="wheel-wrap">
+    <div class="wheel-pointer"></div>
+    <canvas id="wheelCanvas" width="520" height="520" class="idle"></canvas>
+    <div class="wheel-center">💖</div>
+  </div>
+
+  <p class="spinning-msg" id="spinMsg">✨ Spinning the wheel… ✨</p>
+
+<button class="btn-spin" id="spinBtn" onclick="spinWheel()">🎰 SPIN THE WHEEL</button>
+
+  <!-- QUESTION CARD -->
+
+  <div class="question-card" id="questionCard">
+    <div class="q-label">💬 Question</div>
+    <p class="q-text" id="questionText"></p>
+
+```
+<div class="done-instruction">
+  Answer this question <strong>privately</strong> — send your answer on WhatsApp or however you like. Once you have your answer ready, tap <strong>only your button</strong> below. You cannot see the other person's button.
+</div>
+
+<!-- Only MY done button — the other player's is hidden -->
+<button class="btn-my-done" id="myDoneBtn" onclick="markMyDone()">✓ I've Got My Answer</button>
+
+<!-- Status of both -->
+<div class="players-status">
+  <div class="pstatus" id="ps1">
+    <div class="ps-name">🩵 Napolee</div>
+    <div class="ps-icon" id="psIcon1">⏳</div>
+  </div>
+  <div class="pstatus" id="ps2">
+    <div class="ps-name">💗 Fareedah</div>
+    <div class="ps-icon" id="psIcon2">⏳</div>
+  </div>
+</div>
+
+<!-- Only unlocks when BOTH tapped Done -->
+<div class="reveal-section" id="revealSection">
+  <div class="reveal-divider"><span>Both ready! Now type your answers 👇</span></div>
+  <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:13px">
+    <div>
+      <label class="ans-label" style="color:var(--pink-deep)">🩵 Napolee</label>
+      <textarea class="ans-textarea" id="a1" placeholder="Type your answer here…"></textarea>
+    </div>
+    <div>
+      <label class="ans-label" style="color:#c0607a">💗 Fareedah</label>
+      <textarea class="ans-textarea" id="a2" placeholder="Type your answer here…"></textarea>
+    </div>
+  </div>
+  <button class="btn-primary" onclick="submitAnswers()">Reveal Answers 👀</button>
+</div>
+```
+
+  </div>
+
+  <!-- RESULT CARD -->
+
+  <div class="result-card" id="resultCard">
+    <p class="result-q" id="resultQ"></p>
+    <div class="result-row">
+      <div class="result-name" style="color:var(--pink-deep)">🩵 Napolee</div>
+      <div class="result-ans" id="rp1ans"></div>
+    </div>
+    <div class="result-row">
+      <div class="result-name" style="color:#c0607a">💗 Fareedah</div>
+      <div class="result-ans" id="rp2ans"></div>
+    </div>
+    <button class="btn-primary" onclick="nextRound()" style="margin-top:6px">Next Round 🎲</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="history-section">
+    <button class="history-toggle" onclick="toggleHistory()">
+      📜 Round History (<span id="histCount">0</span> rounds) <span id="histArrow">▼</span>
+    </button>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+<button class="btn-download" id="dlBtn" onclick="downloadLog()">💾 Download Memory Log</button>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  BACKEND — Firebase Realtime Database (REST, no SDK)
+//  Uses a public demo project. Room data auto-expires.
+// ═══════════════════════════════════════════════════
+const DB = 'https://couple-spin-game-b8e3a-default-rtdb.firebaseio.com';
+
+async function dbSet(path, val) {
+  try {
+    const r = await fetch(`${DB}/${path}.json`, { method:'PUT', body:JSON.stringify(val), headers:{'Content-Type':'application/json'} });
+    return r.ok;
+  } catch(e){ return false; }
+}
+async function dbPatch(path, val) {
+  try {
+    const r = await fetch(`${DB}/${path}.json`, { method:'PATCH', body:JSON.stringify(val), headers:{'Content-Type':'application/json'} });
+    return r.ok;
+  } catch(e){ return false; }
+}
+async function dbGet(path) {
+  try {
+    const r = await fetch(`${DB}/${path}.json`);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e){ return null; }
+}
+
+// ═══════════════════════════════════════════════════
+//  QUESTIONS
+// ═══════════════════════════════════════════════════
+const ALL_Q = [
+  "What was the first thing you noticed about me when we first met — appearance, vibe, personality, or something else?",
+  "When you meet a random person for the first time, what part of their appearance do you usually notice first — eyes, smile, height, dressing, or confidence?",
+  "What physical feature in someone usually catches your attention quickly and makes them look attractive to you?",
+  "What hairstyle do you usually find most attractive on someone you like? Explain why that hairstyle stands out to you.",
+  "What type of outfit or dressing style makes someone look very attractive to you when you see them?",
+  "Are there certain clothing colors that you think make someone look more attractive or confident? Which ones and why?",
+  "Do you usually find people more attractive when they dress simple and clean or when they dress very stylish and fashionable? Explain why.",
+  "Do you usually prefer someone who looks naturally attractive or someone who clearly puts a lot of effort into their appearance? Why?",
+  "What grooming habits — hair, smell, skincare, neatness — make someone look very attractive and well put together to you?",
+  "What small physical detail like eyes, smile, dimples, voice, or posture makes someone stand out to you immediately?",
+  "What type of outfit would make someone look very attractive to you on a normal day? Describe the style.",
+  "What kind of dressing or style makes someone look confident in your opinion?",
+  "What type of fashion or dressing style makes someone look elegant or classy to you?",
+  "What kind of dressing style or fashion habit can make someone less attractive in your opinion?",
+  "What type of body language — how someone walks, sits, talks, or moves — makes someone look attractive or confident to you?",
+  "What kind of body language makes someone seem uninterested, unfriendly, or unattractive?",
+  "What type of smile makes someone look very attractive to you — soft smile, big smile, shy smile, or confident smile?",
+  "Do you notice someone's voice when meeting them? What kind of voice do you usually find attractive?",
+  "What kind of presence or vibe makes someone feel attractive when they enter a room?",
+  "What makes someone look classy or well put together in your opinion?",
+  "What personality trait makes someone instantly attractive to you when you get to know them?",
+  "What personality trait instantly turns you off or makes you lose interest in someone?",
+  "What type of confidence in a person makes them attractive to you — quiet confidence, bold confidence, or playful confidence?",
+  "What type of attitude toward life makes someone attractive to you?",
+  "What type of energy or vibe do you enjoy being around in people?",
+  "What type of energy in people makes you feel tired, uncomfortable, or drained?",
+  "What type of humor makes someone attractive or enjoyable to be around for you?",
+  "What kind of mindset makes someone inspiring or impressive to you?",
+  "What kind of mindset or behavior pushes you away from people?",
+  "What emotional qualities make someone attractive beyond their physical appearance?",
+  "What behavior in people makes you immediately respect them?",
+  "What behavior slowly makes you lose interest or respect for someone?",
+  "What habit in a person makes them more attractive over time as you get to know them?",
+  "What habit in someone slowly reduces attraction over time?",
+  "What kind of communication style do you appreciate most in people close to you?",
+  "What kind of communication style makes you feel annoyed or disconnected?",
+  "What kind of effort from someone makes you feel valued or appreciated?",
+  "What kind of effort do you think people sometimes forget to show in relationships?",
+  "What small things do people do that make them stand out positively in your eyes?",
+  "What small habits or behaviors quietly ruin attraction in relationships?",
+  "In your opinion, what does a healthy and happy relationship look like?",
+  "What qualities do you value most in a partner or someone you are close to?",
+  "What actions or behavior make you feel loved and appreciated?",
+  "What helps you feel emotionally connected to someone?",
+  "What does loyalty mean to you in relationships?",
+  "What does commitment mean to you when two people are together?",
+  "What actions make someone trustworthy in your opinion?",
+  "What actions make someone difficult to trust?",
+  "What behaviors show emotional maturity in someone?",
+  "What behaviors show emotional immaturity in someone?",
+  "What kind of communication helps relationships stay strong and healthy?",
+  "What kind of communication causes problems or misunderstandings in relationships?",
+  "What kind of support do you appreciate most from people close to you?",
+  "What behavior makes you feel unsupported or alone?",
+  "What type of appreciation do you like receiving from people?",
+  "What type of appreciation do you think people should show more often?",
+  "What makes someone feel safe to talk to and open up to?",
+  "What behavior makes it difficult for you to open up to someone?",
+  "What kind of listening makes you feel respected and understood?",
+  "What kind of response makes you feel misunderstood?",
+  "What daily habits make someone more attractive as time goes on?",
+  "What daily habits slowly reduce attraction in someone?",
+  "What type of consistency in someone's behavior do you admire?",
+  "What kind of inconsistency makes you lose interest in people?",
+  "What behavior makes someone enjoyable to spend time with?",
+  "What behavior makes spending time with someone stressful?",
+  "What type of presence makes someone calming to be around?",
+  "What type of presence makes someone exhausting to be around?",
+  "What behaviors make someone dependable and reliable?",
+  "What behaviors make someone unreliable?",
+  "What makes someone feel special to you in your life?",
+  "What makes someone feel ordinary or forgettable to you?",
+  "What qualities make someone irreplaceable in your life?",
+  "What mistakes do people make that cause them to lose someone important without realizing it?",
+  "What type of personal growth do you admire in people?",
+  "What behavior makes it seem like someone does not want to grow or improve?",
+  "What type of maturity do you respect in people?",
+  "What behaviors show a lack of maturity?",
+  "What makes someone emotionally strong in your opinion?",
+  "What behaviors make someone emotionally difficult to deal with?",
+  "What type of dates do you enjoy the most and why?",
+  "What kind of conversations make you feel closest to someone?",
+  "What kind of shared moments create the strongest memories for you?",
+  "What makes spending time with someone exciting?",
+  "What makes spending time with someone boring?",
+  "What type of adventures do you enjoy experiencing with someone you care about?",
+  "What type of environment makes you feel comfortable around someone?",
+  "What type of energy makes someone unforgettable to you?",
+  "What type of presence makes someone interesting and fun to be around?",
+  "What type of vibe makes someone magnetic or attractive socially?",
+  "What qualities make someone a great long-term partner?",
+  "What type of effort helps relationships last a long time?",
+  "What kind of behavior slowly makes relationships fade away?",
+  "What kind of support should partners give each other in difficult times?",
+  "What kind of respect is important between partners?",
+  "What kind of understanding helps relationships stay strong?",
+  "What lessons do relationships teach people about themselves?",
+  "What actions help love grow stronger over time?",
+  "What actions slowly weaken love in relationships?",
+  "What makes a relationship truly worth keeping and protecting?",
+];
+
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+let myRole   = null;   // 'napolee' | 'fareedah'
+let roomCode = null;
+let isHost   = false;  // napolee = host (spins wheel)
+let round    = 1;
+let history  = [];
+let spinning = false;
+let angle    = 0;
+let pool     = [];
+let pollId   = null;
+let lastHash = '';
+
+// ═══════════════════════════════════════════════════
+//  LOBBY
+// ═══════════════════════════════════════════════════
+function selectRole(role) {
+  myRole = role;
+  document.getElementById('roleNapolee').classList.toggle('selected', role==='napolee');
+  document.getElementById('roleFareedah').classList.toggle('selected', role==='fareedah');
+  document.getElementById('roleCard').style.display = 'none';
+  if (role === 'napolee') initCreateRoom();
+  else document.getElementById('joinCard').style.display = 'block';
+}
+
+async function initCreateRoom() {
+  roomCode = mkCode();
+  isHost   = true;
+  pool     = shuffle([...ALL_Q]);
+  document.getElementById('myRoomCode').textContent = roomCode;
+  document.getElementById('createCard').style.display = 'block';
+
+  const ok = await dbSet(`rooms/${roomCode}`, {
+    phase: 'lobby', round: 1,
+    pool: pool, currentQ: '',
+    done: {napolee:false, fareedah:false},
+    answers: {napolee:'', fareedah:''},
+    history: [], fareedahJoined: false,
+    ts: Date.now()
+  });
+
+  if (!ok) { showToast('⚠️ Connection issue. Check your internet.'); return; }
+
+  // Poll for Fareedah joining
+  pollId = setInterval(async () => {
+    const room = await dbGet(`rooms/${roomCode}`);
+    if (room && room.fareedahJoined) {
+      clearInterval(pollId);
+      document.getElementById('partnerDot').classList.add('online');
+      document.getElementById('partnerStatus').textContent = 'Fareedah joined! 🎉';
+      setTimeout(() => launchGame(room), 1000);
+    }
+  }, 2000);
+}
+
+function switchToJoin() {
+  clearInterval(pollId);
+  document.getElementById('createCard').style.display = 'none';
+  document.getElementById('joinCard').style.display = 'block';
+}
+function switchToCreate() {
+  document.getElementById('joinCard').style.display = 'none';
+  myRole = 'napolee';
+  initCreateRoom();
+}
+
+async function joinRoom() {
+  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  if (code.length !== 4) { showError('Enter the 4-letter code Napolee shared with you.'); return; }
+
+  showWaiting('Joining room…', `Looking for room ${code}`);
+  const room = await dbGet(`rooms/${code}`);
+  hideWaiting();
+
+  if (!room || room === null) { showError('Room not found. Double-check the code!'); return; }
+
+  roomCode = code;
+  isHost   = false;
+  pool     = room.pool || shuffle([...ALL_Q]);
+
+  await dbPatch(`rooms/${roomCode}`, { fareedahJoined: true });
+  launchGame(room);
+}
+
+// ═══════════════════════════════════════════════════
+//  GAME LAUNCH
+// ═══════════════════════════════════════════════════
+function launchGame(room) {
+  clearInterval(pollId);
+  round   = room.round   || 1;
+  history = room.history || [];
+  pool    = room.pool    || shuffle([...ALL_Q]);
+
+  document.getElementById('lobby').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+  document.getElementById('roundNum').textContent = round;
+  updateHistoryCount();
+  drawWheel(0);
+
+  // Only Napolee can spin; Fareedah sees waiting message
+  if (!isHost) {
+    document.getElementById('spinBtn').textContent = '⏳ Waiting for Napolee to spin…';
+    document.getElementById('spinBtn').disabled = true;
+  }
+
+  // Resume mid-game state if already in progress
+  if (room.phase === 'question' && room.currentQ) {
+    showQuestion(room.currentQ);
+    updateDoneUI(room.done || {});
+    if (room.done?.napolee && room.done?.fareedah) revealAnswerSection();
+  } else if (room.phase === 'results' && room.answers) {
+    showResults(room.currentQ, room.answers);
+    renderHistory(); updateHistoryCount();
+  }
+
+  // Start polling
+  pollId = setInterval(syncGameState, 1800);
+}
+
+// ═══════════════════════════════════════════════════
+//  POLLING
+// ═══════════════════════════════════════════════════
+async function syncGameState() {
+  const room = await dbGet(`rooms/${roomCode}`);
+  if (!room) return;
+
+  const h = `${room.phase}|${room.currentQ}|${JSON.stringify(room.done)}|${room.round}`;
+  if (h === lastHash) return;
+  lastHash = h;
+
+  round = room.round || round;
+  document.getElementById('roundNum').textContent = round;
+  pool = room.pool || pool;
+
+  if (room.phase === 'spinning' && !spinning && !isHost) {
+    animateSpin(room.targetAngle || 0);
+  }
+
+  if (room.phase === 'question' && room.currentQ) {
+    // Show question if not already shown
+    if (document.getElementById('questionText').textContent !== room.currentQ) {
+      showQuestion(room.currentQ);
+    }
+    updateDoneUI(room.done || {});
+    if (room.done?.napolee && room.done?.fareedah) revealAnswerSection();
+  }
+
+  if (room.phase === 'results' && room.answers) {
+    if (!document.getElementById('resultCard').classList.contains('visible')) {
+      history = room.history || history;
+      showResults(room.currentQ, room.answers);
+      renderHistory(); updateHistoryCount();
+      if (history.length) document.getElementById('dlBtn').style.display = 'block';
+    }
+  }
+
+  if (room.phase === 'ready') {
+    document.getElementById('resultCard').classList.remove('visible');
+    document.getElementById('questionCard').classList.remove('visible');
+    if (isHost) {
+      document.getElementById('spinBtn').disabled = false;
+      document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  WHEEL
+// ═══════════════════════════════════════════════════
+const SEG = 12;
+const COLORS = ['#f4a7c0','#f9c6d4','#e8799f','#fbe8f0','#f2b8cc','#e896b0','#fdd5e4','#f0a0be','#fac0d2','#ec8aaa','#f7d0e0','#e07898'];
+const LABELS = ['💋','💖','🌹','✨','💫','🎯','🔥','💕','🌟','💎','🎲','💞'];
+
+function drawWheel(r) {
+  const cv = document.getElementById('wheelCanvas');
+  const cx = cv.getContext('2d'), cx2=cv.width/2, cy2=cv.height/2, rad=cx2-10;
+  const sl = (2*Math.PI)/SEG;
+  cx.clearRect(0,0,cv.width,cv.height);
+  for (let i=0;i<SEG;i++) {
+    const s=r+i*sl, e=s+sl, m=s+sl/2;
+    cx.beginPath(); cx.moveTo(cx2,cy2); cx.arc(cx2,cy2,rad,s,e); cx.closePath();
+    cx.fillStyle=COLORS[i%COLORS.length]; cx.fill();
+    const g=cx.createRadialGradient(cx2,cy2,0,cx2,cy2,rad);
+    g.addColorStop(0,'rgba(255,255,255,0.18)'); g.addColorStop(1,'rgba(0,0,0,0.1)');
+    cx.fillStyle=g; cx.fill();
+    cx.strokeStyle='rgba(255,255,255,0.5)'; cx.lineWidth=1.5; cx.stroke();
+    const lr=rad*0.67, lx=cx2+lr*Math.cos(m), ly=cy2+lr*Math.sin(m);
+    cx.save(); cx.translate(lx,ly); cx.rotate(m+Math.PI/2);
+    cx.font='22px serif'; cx.textAlign='center'; cx.textBaseline='middle';
+    cx.fillText(LABELS[i%LABELS.length],0,0); cx.restore();
+  }
+  cx.beginPath(); cx.arc(cx2,cy2,rad,0,2*Math.PI);
+  cx.strokeStyle='rgba(255,255,255,0.55)'; cx.lineWidth=4; cx.stroke();
+  cx.beginPath(); cx.arc(cx2,cy2,26,0,2*Math.PI);
+  cx.fillStyle='#fff5f8'; cx.fill();
+}
+
+function spinWheel() {
+  if (!isHost || spinning) return;
+  spinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('questionCard').classList.remove('visible');
+  document.getElementById('resultCard').classList.remove('visible');
+  document.getElementById('spinMsg').style.display = 'block';
+  document.getElementById('wheelCanvas').classList.remove('idle');
+
+  const spins = 4+Math.random()*4;
+  const targetAngle = angle + spins*2*Math.PI + Math.random()*2*Math.PI;
+  dbPatch(`rooms/${roomCode}`, { phase:'spinning', targetAngle });
+
+  runSpin(targetAngle, () => onSpinEnd(targetAngle));
+}
+
+function animateSpin(targetAngle) {
+  // Partner mirrors the spin animation
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('spinMsg').style.display = 'block';
+  document.getElementById('wheelCanvas').classList.remove('idle');
+  runSpin(targetAngle, () => {
+    spinning = false;
+    document.getElementById('spinMsg').style.display = 'none';
+    document.getElementById('wheelCanvas').classList.add('idle');
+  });
+}
+
+function runSpin(targetAngle, done) {
+  const dur = 3200+Math.random()*800, st = performance.now(), sa = angle;
+  function ease(t){ return 1-Math.pow(1-t,4); }
+  function frame(now){
+    const p = Math.min((now-st)/dur, 1);
+    angle = sa+(targetAngle-sa)*ease(p);
+    drawWheel(angle);
+    if (p<1) requestAnimationFrame(frame);
+    else { angle=targetAngle%(2*Math.PI); done(); }
+  }
+  requestAnimationFrame(frame);
+}
+
+async function onSpinEnd(targetAngle) {
+  spinning = false;
+  document.getElementById('spinMsg').style.display = 'none';
+  document.getElementById('wheelCanvas').classList.add('idle');
+
+  if (pool.length === 0) pool = shuffle([...ALL_Q]);
+  const q = pool.pop();
+
+  await dbPatch(`rooms/${roomCode}`, {
+    phase:'question', currentQ:q, pool,
+    done:{napolee:false,fareedah:false},
+    answers:{napolee:'',fareedah:''}
+  });
+
+  showQuestion(q);
+  triggerConfetti();
+}
+
+// ═══════════════════════════════════════════════════
+//  QUESTION FLOW
+// ═══════════════════════════════════════════════════
+function showQuestion(q) {
+  document.getElementById('questionText').textContent = q;
+  document.getElementById('a1').value = '';
+  document.getElementById('a2').value = '';
+  document.getElementById('revealSection').style.display = 'none';
+  const btn = document.getElementById('myDoneBtn');
+  btn.disabled = false;
+  btn.classList.remove('confirmed');
+  btn.textContent = '✓ I\'ve Got My Answer';
+  document.getElementById('ps1').classList.remove('done');
+  document.getElementById('ps2').classList.remove('done');
+  document.getElementById('psIcon1').textContent = '⏳';
+  document.getElementById('psIcon2').textContent = '⏳';
+  document.getElementById('questionCard').classList.add('visible');
+  document.getElementById('resultCard').classList.remove('visible');
+  if (!isHost) {
+    document.getElementById('spinBtn').disabled = true;
+    document.getElementById('spinBtn').textContent = '⏳ Waiting for Napolee to spin…';
+  }
+}
+
+function updateDoneUI(done) {
+  if (done.napolee) {
+    document.getElementById('ps1').classList.add('done');
+    document.getElementById('psIcon1').textContent = '✅';
+  }
+  if (done.fareedah) {
+    document.getElementById('ps2').classList.add('done');
+    document.getElementById('psIcon2').textContent = '✅';
+  }
+  // Mark my own button confirmed if server says I'm done
+  if ((myRole==='napolee' && done.napolee) || (myRole==='fareedah' && done.fareedah)) {
+    const btn = document.getElementById('myDoneBtn');
+    btn.disabled = true;
+    btn.classList.add('confirmed');
+    btn.textContent = '✅ Marked as Done!';
+  }
+}
+
+function revealAnswerSection() {
+  const rs = document.getElementById('revealSection');
+  if (rs.style.display === 'block') return;
+  rs.style.display = 'block';
+  setTimeout(() => rs.scrollIntoView({behavior:'smooth',block:'nearest'}), 150);
+}
+
+async function markMyDone() {
+  const btn = document.getElementById('myDoneBtn');
+  btn.disabled = true;
+  btn.classList.add('confirmed');
+  btn.textContent = '✅ Marked as Done!';
+
+  // Update only this player's done field
+  await dbPatch(`rooms/${roomCode}/done`, { [myRole]: true });
+
+  // Check immediately if partner is also done
+  const done = await dbGet(`rooms/${roomCode}/done`);
+  updateDoneUI(done || {});
+  if (done?.napolee && done?.fareedah) revealAnswerSection();
+}
+
+async function submitAnswers() {
+  const a1 = document.getElementById('a1').value.trim();
+  const a2 = document.getElementById('a2').value.trim();
+  if (!a1) { showToast('🩵 Napolee needs to type an answer first!'); return; }
+  if (!a2) { showToast('💗 Fareedah needs to type an answer first!'); return; }
+
+  const q = document.getElementById('questionText').textContent;
+  const newHistory = [...history, { q, napolee:a1, fareedah:a2, round }];
+
+  await dbPatch(`rooms/${roomCode}`, {
+    phase:'results',
+    answers:{napolee:a1, fareedah:a2},
+    history:newHistory
+  });
+
+  history = newHistory;
+  showResults(q, {napolee:a1, fareedah:a2});
+  renderHistory(); updateHistoryCount();
+  document.getElementById('dlBtn').style.display = 'block';
+}
+
+function showResults(q, ans) {
+  document.getElementById('resultQ').textContent = `"${q}"`;
+  document.getElementById('rp1ans').textContent = ans.napolee || '—';
+  document.getElementById('rp2ans').textContent = ans.fareedah || '—';
+  document.getElementById('questionCard').classList.remove('visible');
+  document.getElementById('resultCard').classList.add('visible');
+}
+
+async function nextRound() {
+  round++;
+  document.getElementById('roundNum').textContent = round;
+  document.getElementById('resultCard').classList.remove('visible');
+  document.getElementById('questionCard').classList.remove('visible');
+  await dbPatch(`rooms/${roomCode}`, { phase:'ready', round });
+  if (isHost) {
+    document.getElementById('spinBtn').disabled = false;
+    document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  HISTORY / DOWNLOAD
+// ═══════════════════════════════════════════════════
+function updateHistoryCount() { document.getElementById('histCount').textContent = history.length; }
+function toggleHistory() {
+  const l = document.getElementById('historyList'), a = document.getElementById('histArrow');
+  const open = l.style.display === 'flex';
+  l.style.display = open ? 'none' : 'flex';
+  a.textContent = open ? '▼' : '▲';
+}
+function renderHistory() {
+  const l = document.getElementById('historyList'); l.innerHTML = '';
+  [...history].reverse().forEach(item => {
+    const d = document.createElement('div'); d.className = 'history-item';
+    d.innerHTML = `<div class="h-q">Round ${item.round} — "${item.q}"</div>
+      <div class="h-r"><b>🩵 Napolee:</b> ${item.napolee}</div>
+      <div class="h-r"><b>💗 Fareedah:</b> ${item.fareedah}</div>`;
+    l.appendChild(d);
+  });
+}
+function downloadLog() {
+  let txt = `💖 Napolee & Fareedah — Game Log\nDate: ${new Date().toLocaleDateString()}\n\n${'═'.repeat(42)}\n\n`;
+  history.forEach(i => txt += `Round ${i.round}\nQ: ${i.q}\n🩵 Napolee: ${i.napolee}\n💗 Fareedah: ${i.fareedah}\n\n${'─'.repeat(42)}\n\n`);
+  const b = new Blob([txt],{type:'text/plain'});
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a'); a.href=u; a.download='napolee-fareedah-game.txt'; a.click();
+  URL.revokeObjectURL(u);
+}
+
+// ═══════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════
+function mkCode() {
+  return Array.from({length:4}, ()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+}
+function shuffle(a) {
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function showWaiting(t,s){ document.getElementById('waitingText').textContent=t; document.getElementById('waitingSub').textContent=s||''; document.getElementById('waitingOverlay').classList.add('show'); }
+function hideWaiting(){ document.getElementById('waitingOverlay').classList.remove('show'); }
+function showError(m){ const e=document.getElementById('joinError'); e.textContent=m; e.style.display='block'; setTimeout(()=>e.style.display='none',3500); }
+function showToast(m){
+  let t=document.getElementById('_toast');
+  if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--pink-deep);color:#fff;padding:11px 20px;border-radius:50px;font-family:Nunito,sans-serif;font-size:.85rem;font-weight:800;z-index:9999;box-shadow:0 4px 20px #e8799f55;opacity:0;transition:opacity .25s;white-space:nowrap;pointer-events:none;';document.body.appendChild(t);}
+  t.textContent=m;t.style.opacity='1';clearTimeout(t._x);t._x=setTimeout(()=>t.style.opacity='0',2800);
+}
+function triggerConfetti(){
+  const c=document.getElementById('confettiContainer');c.innerHTML='';
+  const cols=['#f4a7c0','#e8799f','#fce4ee','#f9c6d4','#fff','#fdd5e4'];
+  for(let i=0;i<65;i++){const el=document.createElement('div');el.className='confetti-piece';const sz=6+Math.random()*8;el.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.4+Math.random()*2}s;animation-delay:${Math.random()*.4}s;`;c.appendChild(el);}
+  setTimeout(()=>c.innerHTML='',3200);
+}
+
+window.addEventListener('DOMContentLoaded', ()=>drawWheel(0));
+</script>
+
+</body>
+</html>
