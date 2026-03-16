@@ -159,6 +159,16 @@
 .waiting-sub { font-size:.8rem;color:var(–text-soft);text-align:center;max-width:260px; }
 
 .error-msg { color:#c0392b;font-size:.8rem;font-weight:700;text-align:center;margin-top:8px;display:none; }
+
+/* SAVE & RESUME */
+.resume-banner { background:linear-gradient(135deg,#fce4ee,#fff0f5);border:2px solid var(–pink);border-radius:14px;padding:16px;width:100%;max-width:420px;text-align:center;animation:slideUp .4s cubic-bezier(.16,1,.3,1); }
+.resume-banner .rb-title { font-family:‘Playfair Display’,serif;font-size:1rem;font-weight:700;color:var(–pink-deep);margin-bottom:4px; }
+.resume-banner .rb-sub { font-size:.78rem;color:var(–text-soft);margin-bottom:12px; }
+.resume-banner .rb-info { font-size:.75rem;color:var(–text-soft);margin-top:8px; }
+.rb-btns { display:flex;gap:8px; }
+.rb-btns button { flex:1;padding:11px 6px;border-radius:11px;border:none;font-family:‘Nunito’,sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:all .2s; }
+.rb-continue { background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;box-shadow:0 3px 14px #e8799f33; }
+.rb-new { background:var(–pink-light);color:var(–pink-deep);border:1.5px solid var(–pink-border) !important; }
 </style>
 
 </head>
@@ -192,6 +202,17 @@
         <div class="rn">Fareedah</div>
         <div class="rl">Player 2</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Resume Banner (shown if saved session exists) -->
+
+  <div class="resume-banner" id="resumeBanner" style="display:none">
+    <div class="rb-title">💾 You have a saved game!</div>
+    <div class="rb-sub" id="resumeInfo">Round 1 • 0 questions answered</div>
+    <div class="rb-btns">
+      <button class="rb-continue" onclick="resumeGame()">▶ Continue Game</button>
+      <button class="rb-new" onclick="clearAndNew()">✦ New Game</button>
     </div>
   </div>
 
@@ -470,6 +491,86 @@ let pollId   = null;
 let lastHash = '';
 
 // ═══════════════════════════════════════════════════
+//  SAVE & RESUME — uses a fixed permanent room key
+//  stored in localStorage so both players can resume
+// ═══════════════════════════════════════════════════
+const SAVE_KEY = 'napofaree_save';
+const PERM_ROOM = 'NFPERM'; // fixed permanent room code
+
+function saveGame() {
+  const state = { roomCode, round, history, pool, myRole, ts: Date.now() };
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+}
+
+function loadSave() {
+  try { return JSON.parse(localStorage.getItem(SAVE_KEY)); }
+  catch(e) { return null; }
+}
+
+function clearSave() {
+  localStorage.removeItem(SAVE_KEY);
+}
+
+function checkForSavedGame() {
+  const save = loadSave();
+  if (save && save.history && save.history.length > 0) {
+    document.getElementById('resumeInfo').textContent =
+      `Round ${save.round} • ${save.history.length} question${save.history.length!==1?'s':''} answered`;
+    document.getElementById('resumeBanner').style.display = 'block';
+    // Hide role card until they decide
+    document.getElementById('roleCard').style.display = 'none';
+  }
+}
+
+async function resumeGame() {
+  const save = loadSave();
+  if (!save) return;
+  document.getElementById('resumeBanner').style.display = 'none';
+  document.getElementById('roleCard').style.display = 'block';
+
+  myRole   = save.myRole || 'napolee';
+  roomCode = save.roomCode || PERM_ROOM;
+  isHost   = myRole === 'napolee';
+  round    = save.round || 1;
+  history  = save.history || [];
+  pool     = save.pool || shuffle([...ALL_Q]);
+
+  // Try to fetch current DB state for this room
+  showWaiting('Loading your saved game…', 'Just a second 💖');
+  let room = await dbGet(`rooms/${roomCode}`);
+  hideWaiting();
+
+  if (!room) {
+    // Room expired — restore from local save and push back to DB
+    room = {
+      phase: 'ready', round, pool, currentQ: '',
+      done: {napolee:false,fareedah:false},
+      answers: {napolee:'',fareedah:''},
+      history, fareedahJoined: true, ts: Date.now()
+    };
+    await dbSet(`rooms/${roomCode}`, room);
+  } else {
+    // Merge local history with DB (use whichever is longer)
+    if (history.length > (room.history||[]).length) {
+      await dbPatch(`rooms/${roomCode}`, { history, round, pool });
+      room.history = history;
+      room.round = round;
+    }
+  }
+
+  // Mark fareedah as joined if she's resuming
+  if (!isHost) await dbPatch(`rooms/${roomCode}`, { fareedahJoined: true });
+
+  launchGame(room);
+}
+
+function clearAndNew() {
+  clearSave();
+  document.getElementById('resumeBanner').style.display = 'none';
+  document.getElementById('roleCard').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════════
 //  LOBBY
 // ═══════════════════════════════════════════════════
 function selectRole(role) {
@@ -573,6 +674,7 @@ function launchGame(room) {
 
   // Start polling
   pollId = setInterval(syncGameState, 1800);
+  saveGame(); // save room code and initial state
 }
 
 // ═══════════════════════════════════════════════════
@@ -796,6 +898,7 @@ async function submitAnswers() {
   showResults(q, {napolee:a1, fareedah:a2});
   renderHistory(); updateHistoryCount();
   document.getElementById('dlBtn').style.display = 'block';
+  saveGame(); // ← auto-save after every answered question
 }
 
 function showResults(q, ans) {
@@ -812,6 +915,7 @@ async function nextRound() {
   document.getElementById('resultCard').classList.remove('visible');
   document.getElementById('questionCard').classList.remove('visible');
   await dbPatch(`rooms/${roomCode}`, { phase:'ready', round });
+  saveGame(); // ← auto-save round progress
   if (isHost) {
     document.getElementById('spinBtn').disabled = false;
     document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
@@ -872,7 +976,7 @@ function triggerConfetti(){
   setTimeout(()=>c.innerHTML='',3200);
 }
 
-window.addEventListener('DOMContentLoaded', ()=>drawWheel(0));
+window.addEventListener('DOMContentLoaded', () => { drawWheel(0); checkForSavedGame(); });
 </script>
 
 </body>
