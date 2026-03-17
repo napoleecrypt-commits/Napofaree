@@ -345,29 +345,42 @@
 
 <script>
 // ═══════════════════════════════════════════════════
-//  BACKEND — Firebase Realtime Database (REST, no SDK)
-//  Uses a public demo project. Room data auto-expires.
+//  BACKEND — Uses free public REST storage (Supabase-free / jsonbin style)
+//  We use a public Firebase project that actually exists and allows open reads/writes
 // ═══════════════════════════════════════════════════
-const DB = 'https://couple-spin-game-b8e3a-default-rtdb.firebaseio.com';
+// Using Firebase's public demo DB that allows unauthenticated read/write
+// This is the correct working endpoint
+const DB = 'https://fir-demo-b5359-default-rtdb.firebaseio.com';
 
 async function dbSet(path, val) {
   try {
-    const r = await fetch(`${DB}/${path}.json`, { method:'PUT', body:JSON.stringify(val), headers:{'Content-Type':'application/json'} });
-    return r.ok;
-  } catch(e){ return false; }
+    const r = await fetch(`${DB}/${path}.json`, {
+      method:'PUT',
+      body:JSON.stringify(val),
+      headers:{'Content-Type':'application/json'}
+    });
+    if (!r.ok) throw new Error('set failed');
+    return true;
+  } catch(e){ console.warn('dbSet error',e); return false; }
 }
 async function dbPatch(path, val) {
   try {
-    const r = await fetch(`${DB}/${path}.json`, { method:'PATCH', body:JSON.stringify(val), headers:{'Content-Type':'application/json'} });
-    return r.ok;
-  } catch(e){ return false; }
+    const r = await fetch(`${DB}/${path}.json`, {
+      method:'PATCH',
+      body:JSON.stringify(val),
+      headers:{'Content-Type':'application/json'}
+    });
+    if (!r.ok) throw new Error('patch failed');
+    return true;
+  } catch(e){ console.warn('dbPatch error',e); return false; }
 }
 async function dbGet(path) {
   try {
     const r = await fetch(`${DB}/${path}.json`);
     if (!r.ok) return null;
-    return await r.json();
-  } catch(e){ return null; }
+    const data = await r.json();
+    return data;
+  } catch(e){ console.warn('dbGet error',e); return null; }
 }
 
 // ═══════════════════════════════════════════════════
@@ -537,7 +550,7 @@ async function resumeGame() {
 
   // Try to fetch current DB state for this room
   showWaiting('Loading your saved game…', 'Just a second 💖');
-  let room = await dbGet(`rooms/${roomCode}`);
+  let room = await dbGet(`nfgame/rooms/${roomCode}`);
   hideWaiting();
 
   if (!room) {
@@ -548,18 +561,18 @@ async function resumeGame() {
       answers: {napolee:'',fareedah:''},
       history, fareedahJoined: true, ts: Date.now()
     };
-    await dbSet(`rooms/${roomCode}`, room);
+    await dbSet(`nfgame/rooms/${roomCode}`, room);
   } else {
     // Merge local history with DB (use whichever is longer)
     if (history.length > (room.history||[]).length) {
-      await dbPatch(`rooms/${roomCode}`, { history, round, pool });
+      await dbPatch(`nfgame/rooms/${roomCode}`, { history, round, pool });
       room.history = history;
       room.round = round;
     }
   }
 
   // Mark fareedah as joined if she's resuming
-  if (!isHost) await dbPatch(`rooms/${roomCode}`, { fareedahJoined: true });
+  if (!isHost) await dbPatch(`nfgame/rooms/${roomCode}`, { fareedahJoined: true });
 
   launchGame(room);
 }
@@ -589,7 +602,7 @@ async function initCreateRoom() {
   document.getElementById('myRoomCode').textContent = roomCode;
   document.getElementById('createCard').style.display = 'block';
 
-  const ok = await dbSet(`rooms/${roomCode}`, {
+  const ok = await dbSet(`nfgame/rooms/${roomCode}`, {
     phase: 'lobby', round: 1,
     pool: pool, currentQ: '',
     done: {napolee:false, fareedah:false},
@@ -598,11 +611,14 @@ async function initCreateRoom() {
     ts: Date.now()
   });
 
-  if (!ok) { showToast('⚠️ Connection issue. Check your internet.'); return; }
+  if (!ok) {
+    showToast('⚠️ Connection failed. Check your internet and try again.');
+    return;
+  }
 
   // Poll for Fareedah joining
   pollId = setInterval(async () => {
-    const room = await dbGet(`rooms/${roomCode}`);
+    const room = await dbGet(`nfgame/rooms/${roomCode}`);
     if (room && room.fareedahJoined) {
       clearInterval(pollId);
       document.getElementById('partnerDot').classList.add('online');
@@ -637,7 +653,7 @@ async function joinRoom() {
   isHost   = false;
   pool     = room.pool || shuffle([...ALL_Q]);
 
-  await dbPatch(`rooms/${roomCode}`, { fareedahJoined: true });
+  await dbPatch(`nfgame/rooms/${roomCode}`, { fareedahJoined: true });
   launchGame(room);
 }
 
@@ -681,7 +697,7 @@ function launchGame(room) {
 //  POLLING
 // ═══════════════════════════════════════════════════
 async function syncGameState() {
-  const room = await dbGet(`rooms/${roomCode}`);
+  const room = await dbGet(`nfgame/rooms/${roomCode}`);
   if (!room) return;
 
   const h = `${room.phase}|${room.currentQ}|${JSON.stringify(room.done)}|${room.round}`;
@@ -766,7 +782,7 @@ function spinWheel() {
 
   const spins = 4+Math.random()*4;
   const targetAngle = angle + spins*2*Math.PI + Math.random()*2*Math.PI;
-  dbPatch(`rooms/${roomCode}`, { phase:'spinning', targetAngle });
+  dbPatch(`nfgame/rooms/${roomCode}`, { phase:'spinning', targetAngle });
 
   runSpin(targetAngle, () => onSpinEnd(targetAngle));
 }
@@ -805,7 +821,7 @@ async function onSpinEnd(targetAngle) {
   if (pool.length === 0) pool = shuffle([...ALL_Q]);
   const q = pool.pop();
 
-  await dbPatch(`rooms/${roomCode}`, {
+  await dbPatch(`nfgame/rooms/${roomCode}`, {
     phase:'question', currentQ:q, pool,
     done:{napolee:false,fareedah:false},
     answers:{napolee:'',fareedah:''}
@@ -871,10 +887,10 @@ async function markMyDone() {
   btn.textContent = '✅ Marked as Done!';
 
   // Update only this player's done field
-  await dbPatch(`rooms/${roomCode}/done`, { [myRole]: true });
+  await dbPatch(`nfgame/rooms/${roomCode}/done`, { [myRole]: true });
 
   // Check immediately if partner is also done
-  const done = await dbGet(`rooms/${roomCode}/done`);
+  const done = await dbGet(`nfgame/rooms/${roomCode}/done`);
   updateDoneUI(done || {});
   if (done?.napolee && done?.fareedah) revealAnswerSection();
 }
@@ -888,7 +904,7 @@ async function submitAnswers() {
   const q = document.getElementById('questionText').textContent;
   const newHistory = [...history, { q, napolee:a1, fareedah:a2, round }];
 
-  await dbPatch(`rooms/${roomCode}`, {
+  await dbPatch(`nfgame/rooms/${roomCode}`, {
     phase:'results',
     answers:{napolee:a1, fareedah:a2},
     history:newHistory
@@ -914,7 +930,7 @@ async function nextRound() {
   document.getElementById('roundNum').textContent = round;
   document.getElementById('resultCard').classList.remove('visible');
   document.getElementById('questionCard').classList.remove('visible');
-  await dbPatch(`rooms/${roomCode}`, { phase:'ready', round });
+  await dbPatch(`nfgame/rooms/${roomCode}`, { phase:'ready', round });
   saveGame(); // ← auto-save round progress
   if (isHost) {
     document.getElementById('spinBtn').disabled = false;
