@@ -8,991 +8,1063 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fff5f8;
-    --card: #ffffff;
-    --pink: #f4a7c0;
-    --pink-deep: #e8799f;
-    --pink-light: #fce4ee;
-    --pink-border: #f9c6d8;
-    --text: #3d1f2d;
-    --text-soft: #9a6878;
-    --green: #4caf50;
-    --glow-pink: 0 4px 24px #f4a7c055, 0 2px 8px #f4a7c033;
-    --shadow-card: 0 4px 32px #f4a7c030, 0 1px 4px #f4a7c020;
-    --radius: 20px;
+    --bg:#fff5f8; --card:#fff; --pink:#f4a7c0; --dp:#e8799f;
+    --pl:#fce4ee; --pb:#f9c6d8; --text:#3d1f2d; --soft:#9a6878;
+    --glow:0 4px 24px #f4a7c055,0 2px 8px #f4a7c033;
+    --shadow:0 4px 32px #f4a7c028,0 1px 4px #f4a7c018;
+    --r:20px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  body::before, body::after { content:''; position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
-  body::before { width:500px;height:500px;top:-120px;right:-120px;background:radial-gradient(circle,#fcd4e6 0%,transparent 70%);opacity:.5; }
-  body::after  { width:400px;height:400px;bottom:-100px;left:-100px;background:radial-gradient(circle,#fbe8f0 0%,transparent 70%);opacity:.45; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;width:500px;height:500px;top:-130px;right:-130px;border-radius:50%;background:radial-gradient(circle,#fcd4e6,transparent 70%);opacity:.5;pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;width:400px;height:400px;bottom:-110px;left:-110px;border-radius:50%;background:radial-gradient(circle,#fbe8f0,transparent 70%);opacity:.45;pointer-events:none;z-index:0}
 
-.screen { display:none;flex-direction:column;align-items:center;min-height:100vh;padding:28px 16px 44px;position:relative;z-index:1; }
-.screen.active { display:flex; }
+.screen{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:28px 16px 60px;position:relative;z-index:1;gap:16px}
+.screen.active{display:flex}
 
-.logo { font-family:‘Playfair Display’,serif;font-size:clamp(1.9rem,8vw,3rem);font-weight:900;background:linear-gradient(135deg,#e8799f,#f4a7c0,#f7c5d6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.15;filter:drop-shadow(0 2px 8px #f4a7c044); }
-.logo-sub { font-size:.82rem;color:var(–text-soft);text-align:center;margin-top:5px;letter-spacing:3px;text-transform:uppercase; }
+/* LOGO */
+.logo{font-family:‘Playfair Display’,serif;font-size:clamp(2rem,8vw,3rem);font-weight:900;background:linear-gradient(135deg,#e8799f,#f4a7c0,#f7c5d6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.15}
+.sub{font-size:.8rem;color:var(–soft);text-align:center;letter-spacing:3px;text-transform:uppercase}
 
-.card { background:var(–card);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:26px 22px;width:100%;max-width:420px;box-shadow:var(–shadow-card); }
-.card h2 { font-size:.95rem;color:var(–pink-deep);margin-bottom:18px;text-align:center;letter-spacing:1px;font-weight:800; }
+/* CARDS */
+.card{background:var(–card);border:1.5px solid var(–pb);border-radius:var(–r);padding:24px 20px;width:100%;max-width:440px;box-shadow:var(–shadow)}
+.card h2{font-size:.92rem;color:var(–dp);margin-bottom:16px;text-align:center;font-weight:800}
 
-.input-wrap { margin-bottom:14px; }
-.input-wrap label { display:block;font-size:.72rem;color:var(–text-soft);margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800; }
-.input-wrap input { width:100%;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:12px;padding:13px 15px;color:var(–text);font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:700;outline:none;transition:border-color .2s,box-shadow .2s; }
-.input-wrap input:focus { border-color:var(–pink-deep);box-shadow:var(–glow-pink); }
-.input-wrap input::placeholder { color:#c9a0b0; }
+/* INPUTS */
+.lbl{display:block;font-size:.7rem;color:var(–soft);margin-bottom:5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800}
+textarea.ta{width:100%;background:var(–pl);border:1.5px solid var(–pb);border-radius:11px;padding:12px 14px;color:var(–text);font-family:‘Nunito’,sans-serif;font-size:.93rem;font-weight:600;resize:none;min-height:80px;outline:none;transition:border-color .2s;margin-bottom:4px}
+textarea.ta:focus{border-color:var(–dp);box-shadow:var(–glow)}
+textarea.ta::placeholder{color:#c9a0b0}
 
-.btn-primary { width:100%;padding:14px;border-radius:13px;border:none;background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px #e8799f44;transition:transform .15s,box-shadow .15s;letter-spacing:.5px;margin-top:6px; }
-.btn-primary:hover { box-shadow:0 6px 28px #e8799f66; }
-.btn-primary:active { transform:scale(.97); }
-.btn-primary:disabled { opacity:.45;cursor:not-allowed;transform:none; }
-.btn-ghost { width:100%;padding:12px;border-radius:13px;border:1.5px solid var(–pink-border);background:transparent;color:var(–text-soft);font-family:‘Nunito’,sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px; }
-.btn-ghost:hover { border-color:var(–pink-deep);color:var(–pink-deep); }
+/* BUTTONS */
+.btn{width:100%;padding:15px;border-radius:13px;border:none;font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .18s;letter-spacing:.3px}
+.bp{background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;box-shadow:0 4px 18px #e8799f44}
+.bp:active{transform:scale(.97)}
+.bp:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.bo{background:transparent;border:1.5px solid var(–pb)!important;color:var(–soft)}
+.bo:hover{border-color:var(–dp)!important;color:var(–dp)}
+.bg{background:linear-gradient(135deg,#4caf50,#81c784);color:#fff}
 
-/* LOBBY */
-#lobby { gap:20px;justify-content:center; }
+/* HOME */
+#home{justify-content:flex-start;padding-top:36px;gap:18px}
+.home-inner{display:flex;flex-direction:column;gap:14px;width:100%;max-width:440px;margin-top:4px}
 
-.role-grid { display:flex;gap:12px;margin-bottom:4px; }
-.role-btn { flex:1;padding:18px 8px;border-radius:16px;border:2px solid var(–pink-border);background:var(–pink-light);cursor:pointer;text-align:center;transition:all .25s;font-family:‘Nunito’,sans-serif; }
-.role-btn:hover, .role-btn.selected { border-color:var(–pink-deep);background:#fce4ee;box-shadow:var(–glow-pink); }
-.role-btn .re { font-size:2rem;display:block;margin-bottom:6px; }
-.role-btn .rn { font-size:.9rem;font-weight:800;color:var(–text); }
-.role-btn .rl { font-size:.7rem;color:var(–text-soft);margin-top:2px; }
+/* HEADER */
+.home-header{text-align:center;width:100%;max-width:440px}
+.logo-hearts{font-size:2rem;margin:6px 0 4px;line-height:1}
 
-.room-display { background:var(–pink-light);border:2px dashed var(–pink);border-radius:14px;padding:16px;text-align:center;margin:10px 0; }
-.room-display .rd-label { font-size:.7rem;color:var(–text-soft);text-transform:uppercase;letter-spacing:2px;font-weight:800; }
-.room-display .rd-code { font-family:‘Playfair Display’,serif;font-size:2.4rem;font-weight:900;color:var(–pink-deep);letter-spacing:6px;margin:4px 0; }
-.room-display .rd-hint { font-size:.74rem;color:var(–text-soft); }
+/* RESUME */
+.rbanner{background:linear-gradient(135deg,#fce4ee,#fff0f5);border:2px solid var(–pink);border-radius:16px;padding:18px;width:100%;max-width:440px;text-align:center}
+.rbanner .rb-icon{font-size:1.6rem;margin-bottom:4px}
+.rbanner .rt{font-family:‘Playfair Display’,serif;font-size:1.05rem;font-weight:700;color:var(–dp);margin-bottom:4px}
+.rbanner .rs{font-size:.78rem;color:var(–soft);margin-bottom:14px;line-height:1.6;white-space:pre-line}
+.rbtns{display:flex;gap:10px}
+.rbtns button{flex:1;padding:13px;border-radius:12px;border:none;font-family:‘Nunito’,sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s}
+.rb-y{background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;box-shadow:0 3px 14px #e8799f33}
+.rb-n{background:var(–pl);color:var(–dp);border:1.5px solid var(–pb)!important}
 
-.status-pill { display:inline-flex;align-items:center;gap:6px;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:50px;padding:8px 16px;font-size:.78rem;font-weight:700;color:var(–text-soft);margin:6px 0; }
-.dot { width:8px;height:8px;border-radius:50%;background:#ccc;animation:blink 1.2s ease-in-out infinite; }
-.dot.online { background:var(–green); }
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+/* GUIDE CARD */
+.guide-card{background:var(–card);border:1.5px solid var(–pb);border-radius:var(–r);width:100%;max-width:440px;box-shadow:var(–shadow);overflow:hidden}
+.guide-header{display:flex;align-items:center;gap:9px;padding:16px 20px;border-bottom:1px solid var(–pb);background:var(–pl)}
+.guide-icon{font-size:1.1rem}
+.guide-title{font-size:.9rem;font-weight:800;color:var(–text);flex:1;letter-spacing:.3px}
+.guide-toggle{background:transparent;border:1.5px solid var(–pb);border-radius:50px;padding:5px 12px;font-family:‘Nunito’,sans-serif;font-size:.72rem;font-weight:800;color:var(–soft);cursor:pointer;transition:all .2s;white-space:nowrap}
+.guide-toggle:hover{border-color:var(–dp);color:var(–dp)}
+
+.guide-body{padding:18px 20px;display:flex;flex-direction:column;gap:18px}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:13px}
+.step-item{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px #e8799f33}
+.step-content{}
+.step-title{font-size:.88rem;font-weight:800;color:var(–text);margin-bottom:2px}
+.step-desc{font-size:.78rem;color:var(–soft);line-height:1.55}
+.step-desc strong{color:var(–dp)}
+
+/* RULES */
+.rules-section{background:var(–pl);border:1px solid var(–pb);border-radius:13px;padding:14px}
+.rules-title{font-size:.8rem;font-weight:800;color:var(–dp);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase}
+.rule-item{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px;font-size:.78rem;color:var(–soft);line-height:1.5}
+.rule-item:last-child{margin-bottom:0}
+.rule-item strong{color:var(–text)}
+.rule-dot{font-size:.9rem;flex-shrink:0;margin-top:1px}
+
+/* TIPS */
+.tips-section{border-top:1px solid var(–pb);padding-top:14px}
+.tips-title{font-size:.8rem;font-weight:800;color:var(–dp);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase}
+.tip-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;font-size:.77rem;color:var(–soft);line-height:1.5}
+.tip-item:last-child{margin-bottom:0}
+.tip-item::before{content:‘✦’;color:var(–pink);font-size:.7rem;flex-shrink:0;margin-top:2px}
+
+/* START BUTTON */
+.start-btn{padding:18px!important;font-size:1.05rem!important;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px!important}
+.start-icon{font-size:1.3rem}
 
 /* GAME */
-#game { align-items:center;gap:13px;padding-top:16px; }
+#game{padding-top:14px}
 
-.top-bar { width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px; }
-.player-tag { background:var(–card);border:1.5px solid var(–pink-border);border-radius:50px;padding:7px 14px;font-size:.78rem;font-weight:800;display:flex;align-items:center;gap:5px;box-shadow:0 2px 10px #f4a7c018; }
-.p1-tag { border-color:var(–pink-deep);color:var(–pink-deep); }
-.p2-tag { border-color:#d4a0b0;color:#c0607a; }
-.round-badge { background:var(–pink-light);border:1px solid var(–pink-border);border-radius:50px;padding:7px 13px;font-size:.74rem;color:var(–text-soft);font-weight:700; }
+/* TOP BAR */
+.top-bar{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ptag{background:var(–card);border:1.5px solid var(–pb);border-radius:50px;padding:7px 14px;font-size:.78rem;font-weight:800;box-shadow:0 2px 8px #f4a7c015}
+.p1t{border-color:var(–dp);color:var(–dp)}
+.p2t{border-color:#d4a0b0;color:#c0607a}
+.rbadge{background:var(–pl);border:1px solid var(–pb);border-radius:50px;padding:7px 13px;font-size:.74rem;color:var(–soft);font-weight:700;text-align:center}
 
-.wheel-wrap { position:relative;width:min(86vw,310px);height:min(86vw,310px);flex-shrink:0; }
-#wheelCanvas { width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 4px 24px #f4a7c077) drop-shadow(0 2px 8px #e8799f44); }
-.wheel-pointer { position:absolute;top:-15px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:26px solid var(–pink-deep);filter:drop-shadow(0 0 5px #e8799f88);z-index:10; }
-.wheel-center { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fce4ee 60%,#f4a7c0 100%);box-shadow:0 0 14px #f4a7c077;z-index:10;display:flex;align-items:center;justify-content:center;font-size:1.25rem;border:2px solid #fff; }
-@keyframes wheelPulse { 0%,100%{filter:drop-shadow(0 4px 20px #f4a7c066) drop-shadow(0 2px 8px #e8799f33)}50%{filter:drop-shadow(0 4px 32px #f4a7c099) drop-shadow(0 2px 12px #e8799f55)} }
-#wheelCanvas.idle { animation:wheelPulse 2.5s ease-in-out infinite; }
+/* WHEEL */
+.wheel-wrap{position:relative;width:min(84vw,310px);height:min(84vw,310px);flex-shrink:0}
+#wc{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 4px 20px #f4a7c077)}
+.wptr{position:absolute;top:-15px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:28px solid var(–dp);z-index:10;filter:drop-shadow(0 0 5px #e8799f88)}
+.wctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff,#fce4ee 60%,#f4a7c0);box-shadow:0 0 14px #f4a7c066;z-index:10;display:flex;align-items:center;justify-content:center;font-size:1.25rem;border:2px solid #fff}
+@keyframes wP{0%,100%{filter:drop-shadow(0 4px 18px #f4a7c066)}50%{filter:drop-shadow(0 4px 30px #f4a7c099)}}
+#wc.idle{animation:wP 2.5s ease-in-out infinite}
+.smsg{font-size:.85rem;color:var(–dp);font-weight:700;text-align:center;letter-spacing:2px;display:none;animation:pu 1s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
 
-.spinning-msg { font-size:.86rem;color:var(–pink-deep);font-weight:700;text-align:center;letter-spacing:2px;display:none;animation:pulse 1s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.35} }
+/* SPIN COUNTER BADGE */
+.spin-counter-wrap{display:none;align-items:center;gap:8px;justify-content:center}
+.spin-counter-wrap.show{display:flex}
+.sc-label{font-size:.72rem;color:var(–soft);font-weight:700}
+.sc-badge{background:var(–dp);color:#fff;border-radius:50px;padding:4px 12px;font-size:.78rem;font-weight:800}
+.sc-warn{font-size:.7rem;color:#c0392b;font-weight:700}
 
-.btn-spin { width:min(86vw,310px);padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,var(–pink-deep) 0%,var(–pink) 100%);color:#fff;font-family:‘Playfair Display’,serif;font-size:1.2rem;font-weight:700;cursor:pointer;box-shadow:0 4px 24px #e8799f66,inset 0 1px 0 #ffffff40;transition:transform .15s,box-shadow .2s;letter-spacing:2px;position:relative;overflow:hidden; }
-.btn-spin::before { content:’’;position:absolute;inset:0;background:linear-gradient(135deg,#ffffff25,transparent);pointer-events:none; }
-.btn-spin:hover { box-shadow:0 6px 32px #e8799f88; }
-.btn-spin:active { transform:scale(.97); }
-.btn-spin:disabled { opacity:.45;cursor:not-allowed;transform:none;box-shadow:none; }
+.btn-spin{width:min(84vw,310px);padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;font-family:‘Playfair Display’,serif;font-size:1.15rem;font-weight:700;cursor:pointer;box-shadow:0 4px 22px #e8799f55,inset 0 1px 0 #ffffff40;transition:all .18s;letter-spacing:2px;position:relative;overflow:hidden}
+.btn-spin::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,#ffffff20,transparent);pointer-events:none}
+.btn-spin:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-spin.respin{background:linear-gradient(135deg,#c0392b,#e74c3c)}
 
-.question-card { width:100%;max-width:480px;background:var(–card);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:20px;box-shadow:var(–shadow-card);display:none;animation:slideUp .4s cubic-bezier(.16,1,.3,1); }
-.question-card.visible { display:block; }
-@keyframes slideUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+/* WHOSE TURN BANNER */
+.turn-banner{width:100%;max-width:480px;background:var(–pl);border:1.5px solid var(–pb);border-radius:14px;padding:12px 16px;text-align:center;font-size:.85rem;font-weight:700;color:var(–text)}
+.turn-banner span{color:var(–dp);font-weight:800}
 
-.q-label { font-size:.68rem;color:var(–pink-deep);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:6px; }
-.q-label::before { content:’’;display:inline-block;width:16px;height:2px;background:var(–pink);border-radius:2px; }
-.q-text { font-family:‘Playfair Display’,serif;font-size:clamp(.98rem,3.8vw,1.2rem);font-weight:700;line-height:1.45;color:var(–text);margin-bottom:16px; }
+/* QUESTION CARD */
+.qcard{width:100%;max-width:480px;background:var(–card);border:1.5px solid var(–pb);border-radius:var(–r);padding:22px;box-shadow:var(–shadow);display:none}
+.qcard.show{display:block;animation:up .4s cubic-bezier(.16,1,.3,1)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.qlbl{font-size:.68rem;color:var(–dp);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:5px}
+.qlbl::before{content:’’;display:inline-block;width:14px;height:2px;background:var(–pink);border-radius:2px}
+.qtxt{font-family:‘Playfair Display’,serif;font-size:clamp(.97rem,3.8vw,1.18rem);font-weight:700;line-height:1.45;color:var(–text);margin-bottom:4px}
+.qmeta{font-size:.72rem;color:var(–soft);margin-bottom:16px;font-weight:700}
 
-.done-instruction { background:var(–pink-light);border:1px solid var(–pink-border);border-radius:11px;padding:11px 13px;margin-bottom:13px;font-size:.8rem;color:var(–text-soft);line-height:1.5;text-align:center; }
-.done-instruction strong { color:var(–pink-deep); }
+/* ANSWERS */
+.ans-section{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.ans-box{}
+.ans-box .albl{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
 
-.btn-my-done { width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;font-family:‘Nunito’,sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;box-shadow:0 3px 14px #e8799f44;transition:all .2s;margin-bottom:12px; }
-.btn-my-done:disabled { opacity:.4;cursor:not-allowed; }
-.btn-my-done.confirmed { background:linear-gradient(135deg,#4caf50,#81c784);box-shadow:0 3px 14px #4caf5044;pointer-events:none; }
+/* DONE buttons — each player has their own */
+.done-row{display:flex;gap:8px;margin-bottom:12px}
+.done-player-btn{flex:1;padding:12px 8px;border-radius:11px;border:none;font-family:‘Nunito’,sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .2s;line-height:1.3}
+.dpb1{background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;box-shadow:0 3px 12px #e8799f33}
+.dpb2{background:linear-gradient(135deg,#c0607a,#e8799f);color:#fff;box-shadow:0 3px 12px #c0607a33}
+.done-player-btn:disabled{opacity:.4;cursor:not-allowed}
+.done-player-btn.ok{background:linear-gradient(135deg,#4caf50,#81c784);box-shadow:0 3px 12px #4caf5033;pointer-events:none}
 
-.players-status { display:flex;gap:10px;margin-bottom:11px; }
-.pstatus { flex:1;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:12px;padding:10px 8px;text-align:center;transition:all .3s; }
-.pstatus.done { border-color:#81c784;background:#f0faf0; }
-.pstatus .ps-name { font-size:.76rem;font-weight:800;color:var(–text);margin-bottom:4px; }
-.pstatus .ps-icon { font-size:1.1rem; }
+/* Status pills */
+.status-row{display:flex;gap:8px;margin-bottom:12px}
+.spill{flex:1;background:var(–pl);border:1.5px solid var(–pb);border-radius:11px;padding:9px 7px;text-align:center;transition:all .3s}
+.spill.done{border-color:#81c784;background:#f0faf0}
+.spill .sn{font-size:.74rem;font-weight:800;color:var(–text);margin-bottom:3px}
+.spill .si{font-size:1.1rem}
 
-.reveal-section { display:none; }
-.reveal-divider { display:flex;align-items:center;gap:10px;margin:13px 0 11px; }
-.reveal-divider::before,.reveal-divider::after { content:’’;flex:1;height:1px;background:var(–pink-border); }
-.reveal-divider span { font-size:.72rem;font-weight:700;color:var(–text-soft);white-space:nowrap; }
+/* Reveal section */
+.reveal-sec{display:none}
+.rdiv{display:flex;align-items:center;gap:9px;margin:4px 0 13px}
+.rdiv::before,.rdiv::after{content:’’;flex:1;height:1px;background:var(–pb)}
+.rdiv span{font-size:.71rem;font-weight:700;color:var(–soft);white-space:nowrap}
 
-.ans-textarea { width:100%;background:var(–pink-light);border:1.5px solid var(–pink-border);border-radius:11px;padding:11px 13px;color:var(–text);font-family:‘Nunito’,sans-serif;font-size:.9rem;font-weight:600;resize:none;min-height:68px;outline:none;transition:border-color .2s,box-shadow .2s; }
-.ans-textarea:focus { border-color:var(–pink-deep);box-shadow:var(–glow-pink); }
-.ans-textarea::placeholder { color:#c9a0b0; }
-.ans-label { display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px; }
+/* RESULT CARD */
+.rcard{width:100%;max-width:480px;background:linear-gradient(135deg,#fff0f5,#fff8fb);border:1.5px solid var(–pb);border-radius:var(–r);padding:22px;display:none;box-shadow:var(–shadow)}
+.rcard.show{display:block;animation:up .4s cubic-bezier(.16,1,.3,1)}
+.rq{font-family:‘Playfair Display’,serif;font-size:.9rem;color:var(–soft);margin-bottom:13px;font-style:italic}
+.rrow{display:flex;gap:9px;margin-bottom:9px;align-items:flex-start}
+.rname{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;min-width:78px;padding-top:3px}
+.rans{flex:1;background:var(–pl);border:1px solid var(–pb);border-radius:9px;padding:9px 11px;font-size:.86rem;line-height:1.4;color:var(–text)}
 
-.result-card { width:100%;max-width:480px;background:linear-gradient(135deg,#fff0f5,#fff8fb);border:1.5px solid var(–pink-border);border-radius:var(–radius);padding:20px;display:none;animation:slideUp .4s cubic-bezier(.16,1,.3,1);box-shadow:var(–shadow-card); }
-.result-card.visible { display:block; }
-.result-q { font-family:‘Playfair Display’,serif;font-size:.92rem;color:var(–text-soft);margin-bottom:13px;font-style:italic; }
-.result-row { display:flex;gap:10px;margin-bottom:9px;align-items:flex-start; }
-.result-name { font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;min-width:80px;padding-top:3px; }
-.result-ans { flex:1;background:var(–pink-light);border:1px solid var(–pink-border);border-radius:10px;padding:10px 12px;font-size:.87rem;line-height:1.4;color:var(–text); }
+/* HISTORY */
+.hsec{width:100%;max-width:480px}
+.htog{display:flex;align-items:center;justify-content:space-between;background:var(–card);border:1.5px solid var(–pb);border-radius:11px;padding:11px 14px;width:100%;color:var(–soft);font-family:‘Nunito’,sans-serif;font-size:.79rem;font-weight:700;cursor:pointer;transition:all .2s}
+.htog:hover{border-color:var(–dp);color:var(–dp)}
+.hlist{display:none;flex-direction:column;gap:8px;margin-top:8px;max-height:38vh;overflow-y:auto;padding-right:2px}
+.hlist::-webkit-scrollbar{width:3px}
+.hlist::-webkit-scrollbar-thumb{background:#f4a7c055;border-radius:3px}
+.hitem{background:var(–card);border:1.5px solid var(–pb);border-radius:11px;padding:12px;font-size:.78rem}
+.hitem .hq{color:var(–dp);margin-bottom:5px;font-weight:700;font-style:italic}
+.hitem .hm{font-size:.7rem;color:var(–soft);margin-bottom:6px;font-weight:700}
+.hitem .hr{color:var(–soft);line-height:1.5;margin-bottom:2px}
+.hitem .hr b{color:var(–text)}
 
-.history-section { width:100%;max-width:480px;margin-top:5px; }
-.history-toggle { display:flex;align-items:center;justify-content:space-between;background:var(–card);border:1.5px solid var(–pink-border);border-radius:11px;padding:11px 14px;width:100%;color:var(–text-soft);font-family:‘Nunito’,sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s; }
-.history-toggle:hover { border-color:var(–pink-deep);color:var(–pink-deep); }
-.history-list { display:none;flex-direction:column;gap:8px;margin-top:8px;max-height:38vh;overflow-y:auto;padding-right:3px; }
-.history-list::-webkit-scrollbar { width:3px; }
-.history-list::-webkit-scrollbar-thumb { background:#f4a7c055;border-radius:3px; }
-.history-item { background:var(–card);border:1.5px solid var(–pink-border);border-radius:11px;padding:12px;font-size:.79rem; }
-.history-item .h-q { color:var(–pink-deep);margin-bottom:6px;font-weight:700;font-style:italic; }
-.history-item .h-r { color:var(–text-soft);line-height:1.55; }
-.history-item .h-r b { color:var(–text); }
+.dlbtn{width:100%;max-width:480px;padding:11px;border-radius:11px;border:1.5px solid var(–pink);background:transparent;color:var(–dp);font-family:‘Nunito’,sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;display:none}
+.dlbtn:hover{background:var(–pl)}
+.divhr{width:100%;max-width:480px;height:1px;background:var(–pb)}
 
-.btn-download { width:100%;max-width:480px;padding:11px;border-radius:11px;border:1.5px solid var(–pink);background:transparent;color:var(–pink-deep);font-family:‘Nunito’,sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;display:none; }
-.btn-download:hover { background:var(–pink-light);box-shadow:var(–glow-pink); }
-.divider { width:100%;max-width:480px;height:1px;background:var(–pink-border);margin:2px 0; }
+/* PROGRESS */
+.prog-bar-wrap{width:100%;max-width:480px}
+.prog-label{font-size:.7rem;color:var(–soft);font-weight:700;margin-bottom:5px;text-align:center}
+.prog-bar{height:6px;background:var(–pl);border-radius:50px;overflow:hidden;border:1px solid var(–pb)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(–dp),var(–pink));border-radius:50px;transition:width .5s ease}
 
-.confetti-container { position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden; }
-.confetti-piece { position:absolute;width:9px;height:9px;border-radius:2px;animation:confettiFall linear forwards; }
-@keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+/* CONFETTI */
+.cc{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.cp{position:absolute;width:9px;height:9px;border-radius:2px;animation:cf linear forwards}
+@keyframes cf{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-.waiting-overlay { position:fixed;inset:0;background:rgba(255,245,248,.93);backdrop-filter:blur(6px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px; }
-.waiting-overlay.show { display:flex; }
-.waiting-spinner { width:52px;height:52px;border-radius:50%;border:4px solid var(–pink-border);border-top-color:var(–pink-deep);animation:spin .9s linear infinite; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.waiting-text { font-family:‘Playfair Display’,serif;font-size:1.05rem;font-weight:700;color:var(–pink-deep);text-align:center; }
-.waiting-sub { font-size:.8rem;color:var(–text-soft);text-align:center;max-width:260px; }
-
-.error-msg { color:#c0392b;font-size:.8rem;font-weight:700;text-align:center;margin-top:8px;display:none; }
-
-/* SAVE & RESUME */
-.resume-banner { background:linear-gradient(135deg,#fce4ee,#fff0f5);border:2px solid var(–pink);border-radius:14px;padding:16px;width:100%;max-width:420px;text-align:center;animation:slideUp .4s cubic-bezier(.16,1,.3,1); }
-.resume-banner .rb-title { font-family:‘Playfair Display’,serif;font-size:1rem;font-weight:700;color:var(–pink-deep);margin-bottom:4px; }
-.resume-banner .rb-sub { font-size:.78rem;color:var(–text-soft);margin-bottom:12px; }
-.resume-banner .rb-info { font-size:.75rem;color:var(–text-soft);margin-top:8px; }
-.rb-btns { display:flex;gap:8px; }
-.rb-btns button { flex:1;padding:11px 6px;border-radius:11px;border:none;font-family:‘Nunito’,sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:all .2s; }
-.rb-continue { background:linear-gradient(135deg,var(–pink-deep),var(–pink));color:#fff;box-shadow:0 3px 14px #e8799f33; }
-.rb-new { background:var(–pink-light);color:var(–pink-deep);border:1.5px solid var(–pink-border) !important; }
+/* TOAST */
+#_t{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(–dp);color:#fff;padding:11px 20px;border-radius:50px;font-family:‘Nunito’,sans-serif;font-size:.84rem;font-weight:800;z-index:9999;box-shadow:0 4px 20px #e8799f55;opacity:0;transition:opacity .25s;white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center;display:block}
 </style>
 
 </head>
 <body>
-<div class="confetti-container" id="confettiContainer"></div>
+<div class="cc" id="cc"></div>
+<div id="_t"></div>
 
-<div class="waiting-overlay" id="waitingOverlay">
-  <div class="waiting-spinner"></div>
-  <div class="waiting-text" id="waitingText">Connecting…</div>
-  <div class="waiting-sub" id="waitingSub"></div>
+<!-- ══════════════════ HOME ══════════════════ -->
+
+<div class="screen active" id="home">
+
+  <!-- Header -->
+
+  <div class="home-header">
+    <div class="logo">Napolee<br>& Fareedah</div>
+    <div class="logo-hearts">💖</div>
+    <div class="sub">Your personal couple spin game</div>
+  </div>
+
+  <!-- Resume Banner -->
+
+  <div class="rbanner" id="rbanner" style="display:none">
+    <div class="rb-icon">💾</div>
+    <div class="rt">Saved Game Found!</div>
+    <div class="rs" id="rinfo">Loading…</div>
+    <div class="rbtns">
+      <button class="rb-y" onclick="doResume()">▶ Continue</button>
+      <button class="rb-n" onclick="doNew()">✦ New Game</button>
+    </div>
+  </div>
+
+  <!-- HOW TO PLAY -->
+
+  <div class="guide-card" id="guideCard">
+    <div class="guide-header">
+      <span class="guide-icon">📖</span>
+      <span class="guide-title">How To Play</span>
+      <button class="guide-toggle" id="guideToggle" onclick="toggleGuide()">Hide ▲</button>
+    </div>
+
+```
+<div class="guide-body" id="guideBody">
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Open the game together</div>
+        <div class="step-desc">Both Napolee and Fareedah open this same link on their own phones at the same time.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Take turns spinning</div>
+        <div class="step-desc">The game tells you whose turn it is. That person taps the Spin button — the wheel spins and picks a question randomly.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Answer privately</div>
+        <div class="step-desc">Both of you answer the question on your own — type it on WhatsApp, write it down, or just keep it in your head. Don't show each other yet!</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Tap your Done button</div>
+        <div class="step-desc">When you're ready, tap <strong>only your own Done button</strong> — Napolee taps 🩵, Fareedah taps 💗. Once both are done, the answer boxes appear.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Type & Reveal</div>
+        <div class="step-desc">Both type your answers into the game, then tap Reveal — both answers appear at the same time so you can read each other's responses.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <div class="step-title">Next Round</div>
+        <div class="step-desc">Tap Next Round — the turn switches to the other person and they spin next. Keep going as long as you want!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules -->
+  <div class="rules-section">
+    <div class="rules-title">📋 Rules</div>
+    <div class="rule-item">
+      <span class="rule-dot">🔒</span>
+      <span>Questions <strong>do not repeat</strong> until all 100 have been used</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-dot">🔄</span>
+      <span>You <strong>can re-spin</strong> if you want a different question — but it will be recorded as Spin 2, Spin 3, etc. so your partner knows</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-dot">👁️</span>
+      <span>You <strong>cannot see</strong> your partner's answer before they reveal it</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-dot">💾</span>
+      <span>The game <strong>auto-saves</strong> after every round — come back anytime and continue where you stopped</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-dot">🔁</span>
+      <span>Turns <strong>alternate</strong> — Napolee spins first, then Fareedah, back and forth</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-dot">📱</span>
+      <span>Both players must have the game link <strong>open on their phone</strong> at the same time to play</span>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="tips-section">
+    <div class="tips-title">💡 Tips for a better game</div>
+    <div class="tip-item">Be honest — the questions are designed to help you understand each other better</div>
+    <div class="tip-item">Don't overthink — your first answer is usually the truest one</div>
+    <div class="tip-item">After revealing, talk about your answers — the conversation is the point</div>
+    <div class="tip-item">Download the Memory Log at the end to keep all your answers forever</div>
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- START BUTTON -->
+
+  <div class="home-inner" id="homeInner">
+    <button class="btn bp start-btn" onclick="startFresh()">
+      <span class="start-icon">🎰</span>
+      <span>Start New Game</span>
+    </button>
+  </div>
+
 </div>
 
-<!-- ══════════ LOBBY ══════════ -->
-
-<div class="screen active" id="lobby">
-  <div class="logo">Napolee<br>& Fareedah 💖</div>
-  <div class="logo-sub">Your personal spin game</div>
-
-  <!-- Step 1: Choose who you are -->
-
-  <div class="card" id="roleCard">
-    <h2>✨ Who are you?</h2>
-    <div class="role-grid">
-      <div class="role-btn" id="roleNapolee" onclick="selectRole('napolee')">
-        <span class="re">🩵</span>
-        <div class="rn">Napolee</div>
-        <div class="rl">Player 1</div>
-      </div>
-      <div class="role-btn" id="roleFareedah" onclick="selectRole('fareedah')">
-        <span class="re">💗</span>
-        <div class="rn">Fareedah</div>
-        <div class="rl">Player 2</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Resume Banner (shown if saved session exists) -->
-
-  <div class="resume-banner" id="resumeBanner" style="display:none">
-    <div class="rb-title">💾 You have a saved game!</div>
-    <div class="rb-sub" id="resumeInfo">Round 1 • 0 questions answered</div>
-    <div class="rb-btns">
-      <button class="rb-continue" onclick="resumeGame()">▶ Continue Game</button>
-      <button class="rb-new" onclick="clearAndNew()">✦ New Game</button>
-    </div>
-  </div>
-
-  <!-- Create Room (Napolee) -->
-
-  <div class="card" id="createCard" style="display:none">
-    <h2>🎮 Your Game Room</h2>
-    <div class="room-display">
-      <div class="rd-label">Room Code — Share with Fareedah</div>
-      <div class="rd-code" id="myRoomCode">----</div>
-      <div class="rd-hint">She enters this on her phone to join</div>
-    </div>
-    <div style="text-align:center">
-      <div class="status-pill">
-        <div class="dot" id="partnerDot"></div>
-        <span id="partnerStatus">Waiting for Fareedah to join…</span>
-      </div>
-    </div>
-    <button class="btn-ghost" onclick="switchToJoin()">I want to join instead</button>
-  </div>
-
-  <!-- Join Room (Fareedah) -->
-
-  <div class="card" id="joinCard" style="display:none">
-    <h2>🔗 Join Napolee's Room</h2>
-    <div class="input-wrap">
-      <label>Enter Room Code</label>
-      <input type="text" id="joinCodeInput" placeholder="e.g. A7X3" maxlength="4"
-        style="text-transform:uppercase;text-align:center;font-size:1.4rem;letter-spacing:6px"
-        oninput="this.value=this.value.toUpperCase()">
-    </div>
-    <div class="error-msg" id="joinError">Room not found. Check the code!</div>
-    <button class="btn-primary" onclick="joinRoom()">Join Game 💖</button>
-    <button class="btn-ghost" onclick="switchToCreate()">Create a room instead</button>
-  </div>
-</div>
-
-<!-- ══════════ GAME ══════════ -->
+<!-- ══════════════════ GAME ══════════════════ -->
 
 <div class="screen" id="game">
 
+  <!-- Top bar -->
+
   <div class="top-bar">
-    <div class="player-tag p1-tag">🩵 Napolee</div>
-    <div class="round-badge">Round <span id="roundNum">1</span></div>
-    <div class="player-tag p2-tag">💗 Fareedah</div>
+    <div class="ptag p1t">🩵 Napolee</div>
+    <div class="rbadge" id="roundBadge">Round 1</div>
+    <div class="ptag p2t">💗 Fareedah</div>
   </div>
+
+  <!-- Progress bar -->
+
+  <div class="prog-bar-wrap">
+    <div class="prog-label" id="progLabel">0 of 100 questions answered</div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Whose turn -->
+
+  <div class="turn-banner" id="turnBanner">
+    🎯 <span id="turnName">Napolee</span>'s turn to spin
+  </div>
+
+  <!-- Wheel -->
 
   <div class="wheel-wrap">
-    <div class="wheel-pointer"></div>
-    <canvas id="wheelCanvas" width="520" height="520" class="idle"></canvas>
-    <div class="wheel-center">💖</div>
+    <div class="wptr"></div>
+    <canvas id="wc" width="480" height="480" class="idle"></canvas>
+    <div class="wctr">💖</div>
   </div>
 
-  <p class="spinning-msg" id="spinMsg">✨ Spinning the wheel… ✨</p>
+  <!-- Spin counter -->
 
-<button class="btn-spin" id="spinBtn" onclick="spinWheel()">🎰 SPIN THE WHEEL</button>
+  <div class="spin-counter-wrap" id="spinCounterWrap">
+    <div class="sc-label">Spins this question:</div>
+    <div class="sc-badge" id="spinCountBadge">1</div>
+    <div class="sc-warn" id="spinWarn"></div>
+  </div>
 
-  <!-- QUESTION CARD -->
+  <p class="smsg" id="smsg">✨ Spinning… ✨</p>
 
-  <div class="question-card" id="questionCard">
-    <div class="q-label">💬 Question</div>
-    <p class="q-text" id="questionText"></p>
+<button class="btn-spin" id="spinBtn" onclick="doSpin()">🎰 SPIN THE WHEEL</button>
+
+  <!-- Question Card -->
+
+  <div class="qcard" id="qcard">
+    <div class="qlbl">💬 Question</div>
+    <p class="qtxt" id="qtxt"></p>
+    <div class="qmeta" id="qmeta"></div>
 
 ```
-<div class="done-instruction">
-  Answer this question <strong>privately</strong> — send your answer on WhatsApp or however you like. Once you have your answer ready, tap <strong>only your button</strong> below. You cannot see the other person's button.
+<div class="done-row">
+  <button class="done-player-btn dpb1" id="doneBtn1" onclick="markDone(1)">
+    🩵 Napolee<br><span style="font-size:.75rem;opacity:.85">I've answered ✓</span>
+  </button>
+  <button class="done-player-btn dpb2" id="doneBtn2" onclick="markDone(2)">
+    💗 Fareedah<br><span style="font-size:.75rem;opacity:.85">I've answered ✓</span>
+  </button>
 </div>
 
-<!-- Only MY done button — the other player's is hidden -->
-<button class="btn-my-done" id="myDoneBtn" onclick="markMyDone()">✓ I've Got My Answer</button>
-
-<!-- Status of both -->
-<div class="players-status">
-  <div class="pstatus" id="ps1">
-    <div class="ps-name">🩵 Napolee</div>
-    <div class="ps-icon" id="psIcon1">⏳</div>
+<div class="status-row">
+  <div class="spill" id="sp1">
+    <div class="sn">🩵 Napolee</div>
+    <div class="si" id="si1">⏳</div>
   </div>
-  <div class="pstatus" id="ps2">
-    <div class="ps-name">💗 Fareedah</div>
-    <div class="ps-icon" id="psIcon2">⏳</div>
+  <div class="spill" id="sp2">
+    <div class="sn">💗 Fareedah</div>
+    <div class="si" id="si2">⏳</div>
   </div>
 </div>
 
-<!-- Only unlocks when BOTH tapped Done -->
-<div class="reveal-section" id="revealSection">
-  <div class="reveal-divider"><span>Both ready! Now type your answers 👇</span></div>
-  <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:13px">
-    <div>
-      <label class="ans-label" style="color:var(--pink-deep)">🩵 Napolee</label>
-      <textarea class="ans-textarea" id="a1" placeholder="Type your answer here…"></textarea>
+<!-- Reveal answers — only after both tap done -->
+<div class="reveal-sec" id="revealSec">
+  <div class="rdiv"><span>Both ready! Type your answers 👇</span></div>
+  <div class="ans-section">
+    <div class="ans-box">
+      <label class="albl" style="color:var(--dp)">🩵 Napolee's answer</label>
+      <textarea class="ta" id="a1" placeholder="Type your answer here…"></textarea>
     </div>
-    <div>
-      <label class="ans-label" style="color:#c0607a">💗 Fareedah</label>
-      <textarea class="ans-textarea" id="a2" placeholder="Type your answer here…"></textarea>
+    <div class="ans-box">
+      <label class="albl" style="color:#c0607a">💗 Fareedah's answer</label>
+      <textarea class="ta" id="a2" placeholder="Type your answer here…"></textarea>
     </div>
   </div>
-  <button class="btn-primary" onclick="submitAnswers()">Reveal Answers 👀</button>
+  <button class="btn bp" onclick="submitAnswers()">Reveal Both Answers 👀</button>
 </div>
 ```
 
   </div>
 
-  <!-- RESULT CARD -->
+  <!-- Result Card -->
 
-  <div class="result-card" id="resultCard">
-    <p class="result-q" id="resultQ"></p>
-    <div class="result-row">
-      <div class="result-name" style="color:var(--pink-deep)">🩵 Napolee</div>
-      <div class="result-ans" id="rp1ans"></div>
+  <div class="rcard" id="rcard">
+    <p class="rq" id="rq"></p>
+    <div class="rrow">
+      <div class="rname" style="color:var(--dp)">🩵 Napolee</div>
+      <div class="rans" id="ra1"></div>
     </div>
-    <div class="result-row">
-      <div class="result-name" style="color:#c0607a">💗 Fareedah</div>
-      <div class="result-ans" id="rp2ans"></div>
+    <div class="rrow">
+      <div class="rname" style="color:#c0607a">💗 Fareedah</div>
+      <div class="rans" id="ra2"></div>
     </div>
-    <button class="btn-primary" onclick="nextRound()" style="margin-top:6px">Next Round 🎲</button>
+    <button class="btn bp" onclick="nextRound()" style="margin-top:10px" id="nextBtn">Next Round 🎲</button>
   </div>
 
-  <div class="divider"></div>
+  <div class="divhr"></div>
 
-  <div class="history-section">
-    <button class="history-toggle" onclick="toggleHistory()">
-      📜 Round History (<span id="histCount">0</span> rounds) <span id="histArrow">▼</span>
+  <!-- History -->
+
+  <div class="hsec">
+    <button class="htog" onclick="toggleH()">
+      📜 Round History (<span id="hcnt">0</span>) <span id="harr">▼</span>
     </button>
-    <div class="history-list" id="historyList"></div>
+    <div class="hlist" id="hlist"></div>
   </div>
 
-<button class="btn-download" id="dlBtn" onclick="downloadLog()">💾 Download Memory Log</button>
+<button class="dlbtn" id="dlbtn" onclick="dlLog()">💾 Download Memory Log</button>
 
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════
-//  BACKEND — Uses free public REST storage (Supabase-free / jsonbin style)
-//  We use a public Firebase project that actually exists and allows open reads/writes
-// ═══════════════════════════════════════════════════
-// Using Firebase's public demo DB that allows unauthenticated read/write
-// This is the correct working endpoint
-const DB = 'https://fir-demo-b5359-default-rtdb.firebaseio.com';
+// ════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════
+const SAVE_KEY = 'nf_game_v4';
 
-async function dbSet(path, val) {
-  try {
-    const r = await fetch(`${DB}/${path}.json`, {
-      method:'PUT',
-      body:JSON.stringify(val),
-      headers:{'Content-Type':'application/json'}
-    });
-    if (!r.ok) throw new Error('set failed');
-    return true;
-  } catch(e){ console.warn('dbSet error',e); return false; }
-}
-async function dbPatch(path, val) {
-  try {
-    const r = await fetch(`${DB}/${path}.json`, {
-      method:'PATCH',
-      body:JSON.stringify(val),
-      headers:{'Content-Type':'application/json'}
-    });
-    if (!r.ok) throw new Error('patch failed');
-    return true;
-  } catch(e){ console.warn('dbPatch error',e); return false; }
-}
-async function dbGet(path) {
-  try {
-    const r = await fetch(`${DB}/${path}.json`);
-    if (!r.ok) return null;
-    const data = await r.json();
-    return data;
-  } catch(e){ console.warn('dbGet error',e); return null; }
-}
+let state = {
+  round: 1,
+  turn: 'napolee',        // whose turn to spin
+  pool: [],               // remaining questions
+  usedQs: [],             // questions already used
+  history: [],            // completed rounds
+  spinCount: 0,           // how many times spun this question
+  currentQ: '',
+  phase: 'spin',          // spin | question | results
+  done1: false,
+  done2: false,
+  a1: '', a2: '',
+};
 
-// ═══════════════════════════════════════════════════
-//  QUESTIONS
-// ═══════════════════════════════════════════════════
+let spinning = false;
+let angle = 0;
+
+// ════════════════════════════════════════════════
+//  QUESTIONS (100)
+// ════════════════════════════════════════════════
 const ALL_Q = [
-  "What was the first thing you noticed about me when we first met — appearance, vibe, personality, or something else?",
-  "When you meet a random person for the first time, what part of their appearance do you usually notice first — eyes, smile, height, dressing, or confidence?",
-  "What physical feature in someone usually catches your attention quickly and makes them look attractive to you?",
-  "What hairstyle do you usually find most attractive on someone you like? Explain why that hairstyle stands out to you.",
-  "What type of outfit or dressing style makes someone look very attractive to you when you see them?",
-  "Are there certain clothing colors that you think make someone look more attractive or confident? Which ones and why?",
-  "Do you usually find people more attractive when they dress simple and clean or when they dress very stylish and fashionable? Explain why.",
-  "Do you usually prefer someone who looks naturally attractive or someone who clearly puts a lot of effort into their appearance? Why?",
-  "What grooming habits — hair, smell, skincare, neatness — make someone look very attractive and well put together to you?",
-  "What small physical detail like eyes, smile, dimples, voice, or posture makes someone stand out to you immediately?",
-  "What type of outfit would make someone look very attractive to you on a normal day? Describe the style.",
-  "What kind of dressing or style makes someone look confident in your opinion?",
-  "What type of fashion or dressing style makes someone look elegant or classy to you?",
-  "What kind of dressing style or fashion habit can make someone less attractive in your opinion?",
-  "What type of body language — how someone walks, sits, talks, or moves — makes someone look attractive or confident to you?",
-  "What kind of body language makes someone seem uninterested, unfriendly, or unattractive?",
-  "What type of smile makes someone look very attractive to you — soft smile, big smile, shy smile, or confident smile?",
-  "Do you notice someone's voice when meeting them? What kind of voice do you usually find attractive?",
-  "What kind of presence or vibe makes someone feel attractive when they enter a room?",
-  "What makes someone look classy or well put together in your opinion?",
-  "What personality trait makes someone instantly attractive to you when you get to know them?",
-  "What personality trait instantly turns you off or makes you lose interest in someone?",
-  "What type of confidence in a person makes them attractive to you — quiet confidence, bold confidence, or playful confidence?",
-  "What type of attitude toward life makes someone attractive to you?",
-  "What type of energy or vibe do you enjoy being around in people?",
-  "What type of energy in people makes you feel tired, uncomfortable, or drained?",
-  "What type of humor makes someone attractive or enjoyable to be around for you?",
-  "What kind of mindset makes someone inspiring or impressive to you?",
-  "What kind of mindset or behavior pushes you away from people?",
-  "What emotional qualities make someone attractive beyond their physical appearance?",
-  "What behavior in people makes you immediately respect them?",
-  "What behavior slowly makes you lose interest or respect for someone?",
-  "What habit in a person makes them more attractive over time as you get to know them?",
-  "What habit in someone slowly reduces attraction over time?",
-  "What kind of communication style do you appreciate most in people close to you?",
-  "What kind of communication style makes you feel annoyed or disconnected?",
-  "What kind of effort from someone makes you feel valued or appreciated?",
-  "What kind of effort do you think people sometimes forget to show in relationships?",
-  "What small things do people do that make them stand out positively in your eyes?",
-  "What small habits or behaviors quietly ruin attraction in relationships?",
-  "In your opinion, what does a healthy and happy relationship look like?",
-  "What qualities do you value most in a partner or someone you are close to?",
-  "What actions or behavior make you feel loved and appreciated?",
-  "What helps you feel emotionally connected to someone?",
-  "What does loyalty mean to you in relationships?",
-  "What does commitment mean to you when two people are together?",
-  "What actions make someone trustworthy in your opinion?",
-  "What actions make someone difficult to trust?",
-  "What behaviors show emotional maturity in someone?",
-  "What behaviors show emotional immaturity in someone?",
-  "What kind of communication helps relationships stay strong and healthy?",
-  "What kind of communication causes problems or misunderstandings in relationships?",
-  "What kind of support do you appreciate most from people close to you?",
-  "What behavior makes you feel unsupported or alone?",
-  "What type of appreciation do you like receiving from people?",
-  "What type of appreciation do you think people should show more often?",
-  "What makes someone feel safe to talk to and open up to?",
-  "What behavior makes it difficult for you to open up to someone?",
-  "What kind of listening makes you feel respected and understood?",
-  "What kind of response makes you feel misunderstood?",
-  "What daily habits make someone more attractive as time goes on?",
-  "What daily habits slowly reduce attraction in someone?",
-  "What type of consistency in someone's behavior do you admire?",
-  "What kind of inconsistency makes you lose interest in people?",
-  "What behavior makes someone enjoyable to spend time with?",
-  "What behavior makes spending time with someone stressful?",
-  "What type of presence makes someone calming to be around?",
-  "What type of presence makes someone exhausting to be around?",
-  "What behaviors make someone dependable and reliable?",
-  "What behaviors make someone unreliable?",
-  "What makes someone feel special to you in your life?",
-  "What makes someone feel ordinary or forgettable to you?",
-  "What qualities make someone irreplaceable in your life?",
-  "What mistakes do people make that cause them to lose someone important without realizing it?",
-  "What type of personal growth do you admire in people?",
-  "What behavior makes it seem like someone does not want to grow or improve?",
-  "What type of maturity do you respect in people?",
-  "What behaviors show a lack of maturity?",
-  "What makes someone emotionally strong in your opinion?",
-  "What behaviors make someone emotionally difficult to deal with?",
-  "What type of dates do you enjoy the most and why?",
-  "What kind of conversations make you feel closest to someone?",
-  "What kind of shared moments create the strongest memories for you?",
+  // ATTRACTION & PHYSICAL PREFERENCES
+  "What physical feature do you usually notice first in someone?",
+  "What body part do you personally find most attractive in someone?",
+  "What physical feature do you find least attractive in someone?",
+  "What hairstyle do you find most attractive on someone?",
+  "What hairstyle do you usually dislike on someone?",
+  "What outfit style makes someone look very attractive to you?",
+  "What type of dressing do you personally dislike on someone?",
+  "Do you prefer someone who dresses simple or very stylish?",
+  "What clothing color do you find very attractive on someone?",
+  "What clothing style immediately makes someone look less attractive?",
+  // GROOMING & APPEARANCE
+  "How important is good hygiene to you in someone you are attracted to?",
+  "What grooming habits make someone look very attractive to you?",
+  "What grooming habit can make someone less attractive to you?",
+  "How important is smell or perfume when you are close to someone?",
+  "What kind of body language makes someone look confident?",
+  "What body language makes someone look uninterested or unattractive?",
+  "What type of smile do you personally find most attractive?",
+  "What type of voice do you personally find attractive?",
+  // PERSONALITY ATTRACTION
+  "What personality trait instantly attracts you to someone?",
+  "What personality trait instantly turns you off?",
+  "What type of confidence do you find attractive in someone?",
+  "What attitude toward life attracts you to someone?",
+  "What personality habit annoys you the most in people?",
+  "What type of humor do you enjoy the most?",
+  "What personality type drains your energy?",
+  "What kind of mindset inspires you in people?",
+  // HIDDEN EXPECTATIONS
+  "What behavior makes you respect someone immediately?",
+  "What behavior slowly makes you lose respect for someone?",
+  "What habit makes someone more attractive over time?",
+  "What habit slowly kills attraction?",
+  "What communication style do you enjoy from someone you like?",
+  "What communication habit annoys you?",
+  "What effort makes you feel appreciated in a relationship?",
+  "What effort do people sometimes forget to show in relationships?",
+  // EMOTIONAL CONNECTION
+  "What makes you feel loved by someone?",
+  "What makes you feel emotionally close to someone?",
+  "What type of affection do you enjoy the most?",
+  "What type of affection do you dislike?",
+  "What kind of behavior makes you feel safe with someone?",
+  "What behavior makes you slowly distance yourself from someone?",
+  "What type of support do you appreciate most from someone close?",
+  "What kind of reaction makes you feel ignored?",
+  // INTIMACY & SEXUAL PREFERENCES
+  "What usually turns you on the most about someone?",
+  "What physical touch do you enjoy the most during intimacy?",
+  "Do you prefer slow romantic intimacy or intense passion?",
+  "What type of kissing do you enjoy most?",
+  "What makes someone good in bed in your opinion?",
+  "Do you prefer taking control during intimacy or letting your partner lead?",
+  "Do you prefer long foreplay or getting straight into it?",
+  "What body part do you like being touched the most?",
+  "What body part do you enjoy touching the most during intimacy?",
+  // HYGIENE & INTIMATE GROOMING
+  "Do you prefer someone to keep their private area shaved, trimmed, or natural during intimacy?",
+  "How important is cleanliness before intimate moments?",
+  "What hygiene habits make intimacy more enjoyable for you?",
+  "Can body odour affect attraction or intimacy for you?",
+  "What grooming habits do you appreciate in a partner during intimacy?",
+  "What hygiene habits do you think people should pay more attention to during intimacy?",
+  // HONEST & PERSONAL
+  "What lesson did you learn from a past relationship?",
+  "What kind of partner suits your personality best?",
+  "What is something people usually misunderstand about you?",
+  "What type of affection makes you happiest?",
+  "What behavior makes someone emotionally strong?",
+  "What behavior makes someone emotionally difficult?",
+  // FUN BUT REVEALING
+  "What type of dates do you enjoy most?",
+  "What type of conversations make you feel closest to someone?",
   "What makes spending time with someone exciting?",
   "What makes spending time with someone boring?",
-  "What type of adventures do you enjoy experiencing with someone you care about?",
-  "What type of environment makes you feel comfortable around someone?",
-  "What type of energy makes someone unforgettable to you?",
-  "What type of presence makes someone interesting and fun to be around?",
-  "What type of vibe makes someone magnetic or attractive socially?",
+  "What type of adventure would you enjoy with someone?",
+  "What type of environment makes you comfortable with someone?",
+  // LONG-TERM THINKING
   "What qualities make someone a great long-term partner?",
-  "What type of effort helps relationships last a long time?",
-  "What kind of behavior slowly makes relationships fade away?",
-  "What kind of support should partners give each other in difficult times?",
-  "What kind of respect is important between partners?",
-  "What kind of understanding helps relationships stay strong?",
-  "What lessons do relationships teach people about themselves?",
-  "What actions help love grow stronger over time?",
-  "What actions slowly weaken love in relationships?",
-  "What makes a relationship truly worth keeping and protecting?",
+  "What effort helps relationships last?",
+  "What behavior slowly destroys relationships?",
+  "What respect matters most in relationships?",
+  "What makes someone irreplaceable in your life?",
+  "What makes a relationship truly worth keeping?",
+  // US
+  "What was your honest first opinion of me when we met?",
+  "How often do you think about me when we are not together?",
+  "What do you remember most about our first time together?",
+  "What is your favorite thing about being with me?",
+  "Do you think our relationship is how you imagined it when we first met?",
+  "In what ways do you think we could have more fun as a couple?",
+  "What do you love most about what I do during intimate moments?",
+  "What is the number one place you would love for us to visit together?",
+  "If we could do any adventurous activity together what would you choose?",
+  "Would you rather we were caught being intimate or caught having a serious argument?",
+  // DEEP & PERSONAL
+  "What is the biggest lesson you learned from a past relationship?",
+  "What is one thing you would change about your past if you could?",
+  "What is your biggest regret in life?",
+  "What is something you have always wanted to say to someone but never have?",
+  "What is the one question you hate or fear being asked the most?",
+  // DEEP & REFLECTIVE
+  "If you could relive one day of your life which day would it be and why?",
+  "What is one thing you really want to accomplish in your life before you die?",
+  "What is the most daring or adventurous thing you have ever done?",
+  "What is the most important quality you look for in a partner?",
+  "What is one thing you wish people truly understood about you?",
+  // HOME & LIVING TOGETHER
+  "If we lived together what is one habit you would want us both to keep in the house?",
+  "What kind of living space makes you feel most comfortable, quiet and organized or lively and spontaneous?",
+  "What is one household habit you cannot tolerate from someone you live with?",
+  "If we had a free weekend at home with nothing planned how would you want us to spend it together?",
+  "What is one thing you would always want our home to feel like, peaceful, fun, romantic, or something else?",
 ];
 
-// ═══════════════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════════════
-let myRole   = null;   // 'napolee' | 'fareedah'
-let roomCode = null;
-let isHost   = false;  // napolee = host (spins wheel)
-let round    = 1;
-let history  = [];
-let spinning = false;
-let angle    = 0;
-let pool     = [];
-let pollId   = null;
-let lastHash = '';
-
-// ═══════════════════════════════════════════════════
-//  SAVE & RESUME — uses a fixed permanent room key
-//  stored in localStorage so both players can resume
-// ═══════════════════════════════════════════════════
-const SAVE_KEY = 'napofaree_save';
-const PERM_ROOM = 'NFPERM'; // fixed permanent room code
-
+// ════════════════════════════════════════════════
+//  SAVE / LOAD
+// ════════════════════════════════════════════════
 function saveGame() {
-  const state = { roomCode, round, history, pool, myRole, ts: Date.now() };
-  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({...state, angle})); } catch(e){}
 }
 
-function loadSave() {
-  try { return JSON.parse(localStorage.getItem(SAVE_KEY)); }
-  catch(e) { return null; }
+function loadGame() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if (s && s.history !== undefined) return s;
+  } catch(e){}
+  return null;
 }
 
-function clearSave() {
-  localStorage.removeItem(SAVE_KEY);
-}
-
-function checkForSavedGame() {
-  const save = loadSave();
-  if (save && save.history && save.history.length > 0) {
-    document.getElementById('resumeInfo').textContent =
-      `Round ${save.round} • ${save.history.length} question${save.history.length!==1?'s':''} answered`;
-    document.getElementById('resumeBanner').style.display = 'block';
-    // Hide role card until they decide
-    document.getElementById('roleCard').style.display = 'none';
+function checkResume() {
+  const s = loadGame();
+  if (s && (s.history.length > 0 || s.phase !== 'spin' || s.round > 1)) {
+    const answered = s.history.length;
+    const turnName = s.turn === 'napolee' ? 'Napolee' : 'Fareedah';
+    document.getElementById('rinfo').textContent =
+      `Round ${s.round} • ${answered} question${answered!==1?'s':''} answered\nNext spin: ${turnName}`;
+    document.getElementById('rbanner').style.display = 'block';
+    document.getElementById('homeInner').style.display = 'none';
   }
 }
 
-async function resumeGame() {
-  const save = loadSave();
-  if (!save) return;
-  document.getElementById('resumeBanner').style.display = 'none';
-  document.getElementById('roleCard').style.display = 'block';
-
-  myRole   = save.myRole || 'napolee';
-  roomCode = save.roomCode || PERM_ROOM;
-  isHost   = myRole === 'napolee';
-  round    = save.round || 1;
-  history  = save.history || [];
-  pool     = save.pool || shuffle([...ALL_Q]);
-
-  // Try to fetch current DB state for this room
-  showWaiting('Loading your saved game…', 'Just a second 💖');
-  let room = await dbGet(`nfgame/rooms/${roomCode}`);
-  hideWaiting();
-
-  if (!room) {
-    // Room expired — restore from local save and push back to DB
-    room = {
-      phase: 'ready', round, pool, currentQ: '',
-      done: {napolee:false,fareedah:false},
-      answers: {napolee:'',fareedah:''},
-      history, fareedahJoined: true, ts: Date.now()
-    };
-    await dbSet(`nfgame/rooms/${roomCode}`, room);
-  } else {
-    // Merge local history with DB (use whichever is longer)
-    if (history.length > (room.history||[]).length) {
-      await dbPatch(`nfgame/rooms/${roomCode}`, { history, round, pool });
-      room.history = history;
-      room.round = round;
-    }
-  }
-
-  // Mark fareedah as joined if she's resuming
-  if (!isHost) await dbPatch(`nfgame/rooms/${roomCode}`, { fareedahJoined: true });
-
-  launchGame(room);
-}
-
-function clearAndNew() {
-  clearSave();
-  document.getElementById('resumeBanner').style.display = 'none';
-  document.getElementById('roleCard').style.display = 'block';
-}
-
-// ═══════════════════════════════════════════════════
-//  LOBBY
-// ═══════════════════════════════════════════════════
-function selectRole(role) {
-  myRole = role;
-  document.getElementById('roleNapolee').classList.toggle('selected', role==='napolee');
-  document.getElementById('roleFareedah').classList.toggle('selected', role==='fareedah');
-  document.getElementById('roleCard').style.display = 'none';
-  if (role === 'napolee') initCreateRoom();
-  else document.getElementById('joinCard').style.display = 'block';
-}
-
-async function initCreateRoom() {
-  roomCode = mkCode();
-  isHost   = true;
-  pool     = shuffle([...ALL_Q]);
-  document.getElementById('myRoomCode').textContent = roomCode;
-  document.getElementById('createCard').style.display = 'block';
-
-  const ok = await dbSet(`nfgame/rooms/${roomCode}`, {
-    phase: 'lobby', round: 1,
-    pool: pool, currentQ: '',
-    done: {napolee:false, fareedah:false},
-    answers: {napolee:'', fareedah:''},
-    history: [], fareedahJoined: false,
-    ts: Date.now()
-  });
-
-  if (!ok) {
-    showToast('⚠️ Connection failed. Check your internet and try again.');
-    return;
-  }
-
-  // Poll for Fareedah joining
-  pollId = setInterval(async () => {
-    const room = await dbGet(`nfgame/rooms/${roomCode}`);
-    if (room && room.fareedahJoined) {
-      clearInterval(pollId);
-      document.getElementById('partnerDot').classList.add('online');
-      document.getElementById('partnerStatus').textContent = 'Fareedah joined! 🎉';
-      setTimeout(() => launchGame(room), 1000);
-    }
-  }, 2000);
-}
-
-function switchToJoin() {
-  clearInterval(pollId);
-  document.getElementById('createCard').style.display = 'none';
-  document.getElementById('joinCard').style.display = 'block';
-}
-function switchToCreate() {
-  document.getElementById('joinCard').style.display = 'none';
-  myRole = 'napolee';
-  initCreateRoom();
-}
-
-async function joinRoom() {
-  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
-  if (code.length !== 4) { showError('Enter the 4-letter code Napolee shared with you.'); return; }
-
-  showWaiting('Joining room…', `Looking for room ${code}`);
-  const room = await dbGet(`rooms/${code}`);
-  hideWaiting();
-
-  if (!room || room === null) { showError('Room not found. Double-check the code!'); return; }
-
-  roomCode = code;
-  isHost   = false;
-  pool     = room.pool || shuffle([...ALL_Q]);
-
-  await dbPatch(`nfgame/rooms/${roomCode}`, { fareedahJoined: true });
-  launchGame(room);
-}
-
-// ═══════════════════════════════════════════════════
-//  GAME LAUNCH
-// ═══════════════════════════════════════════════════
-function launchGame(room) {
-  clearInterval(pollId);
-  round   = room.round   || 1;
-  history = room.history || [];
-  pool    = room.pool    || shuffle([...ALL_Q]);
-
-  document.getElementById('lobby').classList.remove('active');
+function doResume() {
+  const s = loadGame();
+  Object.assign(state, s);
+  angle = s.angle || 0;
+  document.getElementById('home').classList.remove('active');
   document.getElementById('game').classList.add('active');
-  document.getElementById('roundNum').textContent = round;
-  updateHistoryCount();
-  drawWheel(0);
-
-  // Only Napolee can spin; Fareedah sees waiting message
-  if (!isHost) {
-    document.getElementById('spinBtn').textContent = '⏳ Waiting for Napolee to spin…';
-    document.getElementById('spinBtn').disabled = true;
-  }
-
-  // Resume mid-game state if already in progress
-  if (room.phase === 'question' && room.currentQ) {
-    showQuestion(room.currentQ);
-    updateDoneUI(room.done || {});
-    if (room.done?.napolee && room.done?.fareedah) revealAnswerSection();
-  } else if (room.phase === 'results' && room.answers) {
-    showResults(room.currentQ, room.answers);
-    renderHistory(); updateHistoryCount();
-  }
-
-  // Start polling
-  pollId = setInterval(syncGameState, 1800);
-  saveGame(); // save room code and initial state
+  restorePhase();
 }
 
-// ═══════════════════════════════════════════════════
-//  POLLING
-// ═══════════════════════════════════════════════════
-async function syncGameState() {
-  const room = await dbGet(`nfgame/rooms/${roomCode}`);
-  if (!room) return;
+function doNew() {
+  localStorage.removeItem(SAVE_KEY);
+  document.getElementById('rbanner').style.display = 'none';
+  document.getElementById('homeInner').style.display = 'flex';
+}
 
-  const h = `${room.phase}|${room.currentQ}|${JSON.stringify(room.done)}|${room.round}`;
-  if (h === lastHash) return;
-  lastHash = h;
+function startFresh() {
+  state = {
+    round: 1, turn: 'napolee',
+    pool: shuffle([...ALL_Q]), usedQs: [],
+    history: [], spinCount: 0,
+    currentQ: '', phase: 'spin',
+    done1: false, done2: false, a1: '', a2: '',
+  };
+  angle = 0;
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+  initGameUI();
+  saveGame();
+}
 
-  round = room.round || round;
-  document.getElementById('roundNum').textContent = round;
-  pool = room.pool || pool;
+// ════════════════════════════════════════════════
+//  RESTORE PHASE ON RESUME
+// ════════════════════════════════════════════════
+function restorePhase() {
+  initGameUI();
+  drawWheel(angle);
 
-  if (room.phase === 'spinning' && !spinning && !isHost) {
-    animateSpin(room.targetAngle || 0);
-  }
-
-  if (room.phase === 'question' && room.currentQ) {
-    // Show question if not already shown
-    if (document.getElementById('questionText').textContent !== room.currentQ) {
-      showQuestion(room.currentQ);
+  if (state.phase === 'question' && state.currentQ) {
+    showQuestion(state.currentQ, false);
+    // Restore done states
+    if (state.done1) { markDoneUI(1); }
+    if (state.done2) { markDoneUI(2); }
+    if (state.done1 && state.done2) {
+      document.getElementById('revealSec').style.display = 'block';
+      if (state.a1) document.getElementById('a1').value = state.a1;
+      if (state.a2) document.getElementById('a2').value = state.a2;
     }
-    updateDoneUI(room.done || {});
-    if (room.done?.napolee && room.done?.fareedah) revealAnswerSection();
-  }
-
-  if (room.phase === 'results' && room.answers) {
-    if (!document.getElementById('resultCard').classList.contains('visible')) {
-      history = room.history || history;
-      showResults(room.currentQ, room.answers);
-      renderHistory(); updateHistoryCount();
-      if (history.length) document.getElementById('dlBtn').style.display = 'block';
-    }
-  }
-
-  if (room.phase === 'ready') {
-    document.getElementById('resultCard').classList.remove('visible');
-    document.getElementById('questionCard').classList.remove('visible');
-    if (isHost) {
-      document.getElementById('spinBtn').disabled = false;
-      document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
-    }
+  } else if (state.phase === 'results' && state.currentQ) {
+    showResults(state.currentQ, state.a1, state.a2, false);
+  } else {
+    // spin phase
+    document.getElementById('spinBtn').disabled = false;
   }
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+//  INIT GAME UI
+// ════════════════════════════════════════════════
+function initGameUI() {
+  updateTopBar();
+  updateProgress();
+  drawWheel(angle);
+  updateHCount();
+  if (state.history.length > 0) {
+    renderHistory();
+    document.getElementById('dlbtn').style.display = 'block';
+  }
+}
+
+function updateTopBar() {
+  document.getElementById('roundBadge').textContent = `Round ${state.round}`;
+  const name = state.turn === 'napolee' ? 'Napolee' : 'Fareedah';
+  document.getElementById('turnName').textContent = name;
+  document.getElementById('turnBanner').style.display = state.phase === 'spin' ? 'block' : 'none';
+}
+
+function updateProgress() {
+  const done = state.history.length;
+  const total = 100;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progLabel').textContent = `${done} of ${total} questions answered`;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ════════════════════════════════════════════════
 //  WHEEL
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 const SEG = 12;
-const COLORS = ['#f4a7c0','#f9c6d4','#e8799f','#fbe8f0','#f2b8cc','#e896b0','#fdd5e4','#f0a0be','#fac0d2','#ec8aaa','#f7d0e0','#e07898'];
-const LABELS = ['💋','💖','🌹','✨','💫','🎯','🔥','💕','🌟','💎','🎲','💞'];
+const COLS = ['#f4a7c0','#f9c6d4','#e8799f','#fbe8f0','#f2b8cc','#e896b0','#fdd5e4','#f0a0be','#fac0d2','#ec8aaa','#f7d0e0','#e07898'];
+const LBLS = ['💋','💖','🌹','✨','💫','🎯','🔥','💕','🌟','💎','🎲','💞'];
 
-function drawWheel(r) {
-  const cv = document.getElementById('wheelCanvas');
-  const cx = cv.getContext('2d'), cx2=cv.width/2, cy2=cv.height/2, rad=cx2-10;
-  const sl = (2*Math.PI)/SEG;
-  cx.clearRect(0,0,cv.width,cv.height);
-  for (let i=0;i<SEG;i++) {
-    const s=r+i*sl, e=s+sl, m=s+sl/2;
-    cx.beginPath(); cx.moveTo(cx2,cy2); cx.arc(cx2,cy2,rad,s,e); cx.closePath();
-    cx.fillStyle=COLORS[i%COLORS.length]; cx.fill();
-    const g=cx.createRadialGradient(cx2,cy2,0,cx2,cy2,rad);
+function drawWheel(rot) {
+  const cv = document.getElementById('wc'), ctx = cv.getContext('2d');
+  const cx = cv.width/2, cy = cv.height/2, r = cx-10, sl = (2*Math.PI)/SEG;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  for (let i=0; i<SEG; i++) {
+    const s=rot+i*sl, e=s+sl, m=s+sl/2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+    ctx.fillStyle = COLS[i%COLS.length]; ctx.fill();
+    const g = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
     g.addColorStop(0,'rgba(255,255,255,0.18)'); g.addColorStop(1,'rgba(0,0,0,0.1)');
-    cx.fillStyle=g; cx.fill();
-    cx.strokeStyle='rgba(255,255,255,0.5)'; cx.lineWidth=1.5; cx.stroke();
-    const lr=rad*0.67, lx=cx2+lr*Math.cos(m), ly=cy2+lr*Math.sin(m);
-    cx.save(); cx.translate(lx,ly); cx.rotate(m+Math.PI/2);
-    cx.font='22px serif'; cx.textAlign='center'; cx.textBaseline='middle';
-    cx.fillText(LABELS[i%LABELS.length],0,0); cx.restore();
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5; ctx.stroke();
+    const lr=r*0.67, lx=cx+lr*Math.cos(m), ly=cy+lr*Math.sin(m);
+    ctx.save(); ctx.translate(lx,ly); ctx.rotate(m+Math.PI/2);
+    ctx.font = '20px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(LBLS[i%LBLS.length],0,0); ctx.restore();
   }
-  cx.beginPath(); cx.arc(cx2,cy2,rad,0,2*Math.PI);
-  cx.strokeStyle='rgba(255,255,255,0.55)'; cx.lineWidth=4; cx.stroke();
-  cx.beginPath(); cx.arc(cx2,cy2,26,0,2*Math.PI);
-  cx.fillStyle='#fff5f8'; cx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,2*Math.PI);
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 4; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx,cy,25,0,2*Math.PI);
+  ctx.fillStyle = '#fff5f8'; ctx.fill();
 }
 
-function spinWheel() {
-  if (!isHost || spinning) return;
-  spinning = true;
-  document.getElementById('spinBtn').disabled = true;
-  document.getElementById('questionCard').classList.remove('visible');
-  document.getElementById('resultCard').classList.remove('visible');
-  document.getElementById('spinMsg').style.display = 'block';
-  document.getElementById('wheelCanvas').classList.remove('idle');
-
-  const spins = 4+Math.random()*4;
-  const targetAngle = angle + spins*2*Math.PI + Math.random()*2*Math.PI;
-  dbPatch(`nfgame/rooms/${roomCode}`, { phase:'spinning', targetAngle });
-
-  runSpin(targetAngle, () => onSpinEnd(targetAngle));
-}
-
-function animateSpin(targetAngle) {
-  // Partner mirrors the spin animation
+function doSpin() {
   if (spinning) return;
-  spinning = true;
-  document.getElementById('spinMsg').style.display = 'block';
-  document.getElementById('wheelCanvas').classList.remove('idle');
-  runSpin(targetAngle, () => {
-    spinning = false;
-    document.getElementById('spinMsg').style.display = 'none';
-    document.getElementById('wheelCanvas').classList.add('idle');
-  });
-}
 
-function runSpin(targetAngle, done) {
-  const dur = 3200+Math.random()*800, st = performance.now(), sa = angle;
-  function ease(t){ return 1-Math.pow(1-t,4); }
-  function frame(now){
+  // Increment spin count for this question
+  state.spinCount++;
+  spinning = true;
+
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('qcard').classList.remove('show');
+  document.getElementById('rcard').classList.remove('show');
+  document.getElementById('smsg').style.display = 'block';
+  document.getElementById('wc').classList.remove('idle');
+  document.getElementById('turnBanner').style.display = 'none';
+
+  const target = angle + (4 + Math.random()*4)*2*Math.PI + Math.random()*2*Math.PI;
+  const dur = 3000 + Math.random()*1000;
+  const st = performance.now(), sa = angle;
+
+  function ease(t) { return 1-Math.pow(1-t,4); }
+  function frame(now) {
     const p = Math.min((now-st)/dur, 1);
-    angle = sa+(targetAngle-sa)*ease(p);
+    angle = sa + (target-sa)*ease(p);
     drawWheel(angle);
-    if (p<1) requestAnimationFrame(frame);
-    else { angle=targetAngle%(2*Math.PI); done(); }
+    if (p < 1) { requestAnimationFrame(frame); }
+    else {
+      angle = target % (2*Math.PI);
+      spinning = false;
+      document.getElementById('smsg').style.display = 'none';
+      document.getElementById('wc').classList.add('idle');
+      onSpinEnd();
+    }
   }
   requestAnimationFrame(frame);
 }
 
-async function onSpinEnd(targetAngle) {
-  spinning = false;
-  document.getElementById('spinMsg').style.display = 'none';
-  document.getElementById('wheelCanvas').classList.add('idle');
+function onSpinEnd() {
+  // Refill pool if empty
+  if (state.pool.length === 0) {
+    state.pool = shuffle([...ALL_Q].filter(q => !state.usedQs.includes(q)));
+    if (state.pool.length === 0) {
+      state.pool = shuffle([...ALL_Q]);
+      state.usedQs = [];
+    }
+  }
 
-  if (pool.length === 0) pool = shuffle([...ALL_Q]);
-  const q = pool.pop();
+  const q = state.pool.pop();
+  state.usedQs.push(q);
+  state.currentQ = q;
+  state.phase = 'question';
+  state.done1 = false;
+  state.done2 = false;
+  state.a1 = '';
+  state.a2 = '';
 
-  await dbPatch(`nfgame/rooms/${roomCode}`, {
-    phase:'question', currentQ:q, pool,
-    done:{napolee:false,fareedah:false},
-    answers:{napolee:'',fareedah:''}
-  });
-
-  showQuestion(q);
-  triggerConfetti();
+  saveGame();
+  showQuestion(q, true);
+  confetti();
 }
 
-// ═══════════════════════════════════════════════════
-//  QUESTION FLOW
-// ═══════════════════════════════════════════════════
-function showQuestion(q) {
-  document.getElementById('questionText').textContent = q;
-  document.getElementById('a1').value = '';
-  document.getElementById('a2').value = '';
-  document.getElementById('revealSection').style.display = 'none';
-  const btn = document.getElementById('myDoneBtn');
-  btn.disabled = false;
-  btn.classList.remove('confirmed');
-  btn.textContent = '✓ I\'ve Got My Answer';
-  document.getElementById('ps1').classList.remove('done');
-  document.getElementById('ps2').classList.remove('done');
-  document.getElementById('psIcon1').textContent = '⏳';
-  document.getElementById('psIcon2').textContent = '⏳';
-  document.getElementById('questionCard').classList.add('visible');
-  document.getElementById('resultCard').classList.remove('visible');
-  if (!isHost) {
+// ════════════════════════════════════════════════
+//  QUESTION
+// ════════════════════════════════════════════════
+function showQuestion(q, fresh) {
+  document.getElementById('qtxt').textContent = q;
+
+  // Spin count indicator
+  const count = state.spinCount;
+  const scWrap = document.getElementById('spinCounterWrap');
+  const scBadge = document.getElementById('spinCountBadge');
+  const scWarn = document.getElementById('spinWarn');
+
+  if (count > 0) {
+    scWrap.classList.add('show');
+    scBadge.textContent = count === 1 ? '1st spin ✓' : `${count} spins ⚠️`;
+    scBadge.style.background = count === 1 ? 'var(--dp)' : '#c0392b';
+    scWarn.textContent = count > 1 ? `Spun ${count} times on this question` : '';
+    document.getElementById('qmeta').textContent = count === 1
+      ? `🎯 ${state.turn === 'napolee' ? 'Napolee' : 'Fareedah'} spun once — first try!`
+      : `⚠️ ${state.turn === 'napolee' ? 'Napolee' : 'Fareedah'} spun ${count} times on this question`;
+  }
+
+  if (fresh) {
+    // Reset done buttons
+    const b1 = document.getElementById('doneBtn1');
+    const b2 = document.getElementById('doneBtn2');
+    b1.disabled = false; b1.classList.remove('ok');
+    b1.innerHTML = '🩵 Napolee<br><span style="font-size:.75rem;opacity:.85">I\'ve answered ✓</span>';
+    b2.disabled = false; b2.classList.remove('ok');
+    b2.innerHTML = '💗 Fareedah<br><span style="font-size:.75rem;opacity:.85">I\'ve answered ✓</span>';
+    document.getElementById('sp1').classList.remove('done');
+    document.getElementById('sp2').classList.remove('done');
+    document.getElementById('si1').textContent = '⏳';
+    document.getElementById('si2').textContent = '⏳';
+    document.getElementById('revealSec').style.display = 'none';
+    document.getElementById('a1').value = '';
+    document.getElementById('a2').value = '';
+  }
+
+  document.getElementById('qcard').classList.add('show');
+  document.getElementById('rcard').classList.remove('show');
+
+  // Spin button: allow respin but label changes
+  document.getElementById('spinBtn').disabled = false;
+  document.getElementById('spinBtn').textContent = '🔄 Re-Spin';
+  document.getElementById('spinBtn').classList.add('respin');
+}
+
+// ════════════════════════════════════════════════
+//  DONE BUTTONS
+// ════════════════════════════════════════════════
+function markDone(player) {
+  if (player === 1) {
+    state.done1 = true;
+    markDoneUI(1);
+  } else {
+    state.done2 = true;
+    markDoneUI(2);
+  }
+  saveGame();
+  if (state.done1 && state.done2) {
+    // Disable respin once both are done
     document.getElementById('spinBtn').disabled = true;
-    document.getElementById('spinBtn').textContent = '⏳ Waiting for Napolee to spin…';
+    showReveal();
   }
 }
 
-function updateDoneUI(done) {
-  if (done.napolee) {
-    document.getElementById('ps1').classList.add('done');
-    document.getElementById('psIcon1').textContent = '✅';
-  }
-  if (done.fareedah) {
-    document.getElementById('ps2').classList.add('done');
-    document.getElementById('psIcon2').textContent = '✅';
-  }
-  // Mark my own button confirmed if server says I'm done
-  if ((myRole==='napolee' && done.napolee) || (myRole==='fareedah' && done.fareedah)) {
-    const btn = document.getElementById('myDoneBtn');
-    btn.disabled = true;
-    btn.classList.add('confirmed');
-    btn.textContent = '✅ Marked as Done!';
+function markDoneUI(player) {
+  if (player === 1) {
+    const b = document.getElementById('doneBtn1');
+    b.disabled = true; b.classList.add('ok');
+    b.innerHTML = '🩵 Napolee<br><span style="font-size:.75rem">✅ Ready!</span>';
+    document.getElementById('sp1').classList.add('done');
+    document.getElementById('si1').textContent = '✅';
+  } else {
+    const b = document.getElementById('doneBtn2');
+    b.disabled = true; b.classList.add('ok');
+    b.innerHTML = '💗 Fareedah<br><span style="font-size:.75rem">✅ Ready!</span>';
+    document.getElementById('sp2').classList.add('done');
+    document.getElementById('si2').textContent = '✅';
   }
 }
 
-function revealAnswerSection() {
-  const rs = document.getElementById('revealSection');
-  if (rs.style.display === 'block') return;
+function showReveal() {
+  const rs = document.getElementById('revealSec');
   rs.style.display = 'block';
-  setTimeout(() => rs.scrollIntoView({behavior:'smooth',block:'nearest'}), 150);
+  setTimeout(() => rs.scrollIntoView({behavior:'smooth', block:'nearest'}), 150);
 }
 
-async function markMyDone() {
-  const btn = document.getElementById('myDoneBtn');
-  btn.disabled = true;
-  btn.classList.add('confirmed');
-  btn.textContent = '✅ Marked as Done!';
-
-  // Update only this player's done field
-  await dbPatch(`nfgame/rooms/${roomCode}/done`, { [myRole]: true });
-
-  // Check immediately if partner is also done
-  const done = await dbGet(`nfgame/rooms/${roomCode}/done`);
-  updateDoneUI(done || {});
-  if (done?.napolee && done?.fareedah) revealAnswerSection();
-}
-
-async function submitAnswers() {
+// ════════════════════════════════════════════════
+//  SUBMIT ANSWERS
+// ════════════════════════════════════════════════
+function submitAnswers() {
   const a1 = document.getElementById('a1').value.trim();
   const a2 = document.getElementById('a2').value.trim();
-  if (!a1) { showToast('🩵 Napolee needs to type an answer first!'); return; }
-  if (!a2) { showToast('💗 Fareedah needs to type an answer first!'); return; }
+  if (!a1) { toast('🩵 Napolee needs to type an answer first!'); return; }
+  if (!a2) { toast('💗 Fareedah needs to type an answer first!'); return; }
 
-  const q = document.getElementById('questionText').textContent;
-  const newHistory = [...history, { q, napolee:a1, fareedah:a2, round }];
+  state.a1 = a1;
+  state.a2 = a2;
+  state.phase = 'results';
 
-  await dbPatch(`nfgame/rooms/${roomCode}`, {
-    phase:'results',
-    answers:{napolee:a1, fareedah:a2},
-    history:newHistory
-  });
+  const entry = {
+    round: state.round,
+    q: state.currentQ,
+    napolee: a1,
+    fareedah: a2,
+    spins: state.spinCount,
+    spinner: state.turn
+  };
+  state.history.push(entry);
+  saveGame();
 
-  history = newHistory;
-  showResults(q, {napolee:a1, fareedah:a2});
-  renderHistory(); updateHistoryCount();
-  document.getElementById('dlBtn').style.display = 'block';
-  saveGame(); // ← auto-save after every answered question
+  showResults(state.currentQ, a1, a2, true);
+  renderHistory();
+  updateHCount();
+  updateProgress();
+  document.getElementById('dlbtn').style.display = 'block';
 }
 
-function showResults(q, ans) {
-  document.getElementById('resultQ').textContent = `"${q}"`;
-  document.getElementById('rp1ans').textContent = ans.napolee || '—';
-  document.getElementById('rp2ans').textContent = ans.fareedah || '—';
-  document.getElementById('questionCard').classList.remove('visible');
-  document.getElementById('resultCard').classList.add('visible');
-}
+function showResults(q, a1, a2, fresh) {
+  document.getElementById('rq').textContent = `"${q}"`;
+  document.getElementById('ra1').textContent = a1;
+  document.getElementById('ra2').textContent = a2;
+  document.getElementById('qcard').classList.remove('show');
+  document.getElementById('rcard').classList.add('show');
 
-async function nextRound() {
-  round++;
-  document.getElementById('roundNum').textContent = round;
-  document.getElementById('resultCard').classList.remove('visible');
-  document.getElementById('questionCard').classList.remove('visible');
-  await dbPatch(`nfgame/rooms/${roomCode}`, { phase:'ready', round });
-  saveGame(); // ← auto-save round progress
-  if (isHost) {
-    document.getElementById('spinBtn').disabled = false;
-    document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
+  if (fresh) {
+    // Alternate whose turn it is next round
+    state.turn = state.turn === 'napolee' ? 'fareedah' : 'napolee';
   }
 }
 
-// ═══════════════════════════════════════════════════
-//  HISTORY / DOWNLOAD
-// ═══════════════════════════════════════════════════
-function updateHistoryCount() { document.getElementById('histCount').textContent = history.length; }
-function toggleHistory() {
-  const l = document.getElementById('historyList'), a = document.getElementById('histArrow');
+// ════════════════════════════════════════════════
+//  NEXT ROUND
+// ════════════════════════════════════════════════
+function nextRound() {
+  state.round++;
+  state.spinCount = 0;
+  state.phase = 'spin';
+  state.done1 = false;
+  state.done2 = false;
+  state.a1 = '';
+  state.a2 = '';
+  state.currentQ = '';
+  saveGame();
+
+  document.getElementById('rcard').classList.remove('show');
+  document.getElementById('qcard').classList.remove('show');
+  document.getElementById('spinCounterWrap').classList.remove('show');
+
+  // Reset spin button
+  document.getElementById('spinBtn').disabled = false;
+  document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
+  document.getElementById('spinBtn').classList.remove('respin');
+
+  updateTopBar();
+}
+
+// ════════════════════════════════════════════════
+//  HISTORY
+// ════════════════════════════════════════════════
+function updateHCount() {
+  document.getElementById('hcnt').textContent = state.history.length;
+}
+
+function toggleH() {
+  const l = document.getElementById('hlist'), a = document.getElementById('harr');
   const open = l.style.display === 'flex';
   l.style.display = open ? 'none' : 'flex';
   a.textContent = open ? '▼' : '▲';
 }
+
 function renderHistory() {
-  const l = document.getElementById('historyList'); l.innerHTML = '';
-  [...history].reverse().forEach(item => {
-    const d = document.createElement('div'); d.className = 'history-item';
-    d.innerHTML = `<div class="h-q">Round ${item.round} — "${item.q}"</div>
-      <div class="h-r"><b>🩵 Napolee:</b> ${item.napolee}</div>
-      <div class="h-r"><b>💗 Fareedah:</b> ${item.fareedah}</div>`;
+  const l = document.getElementById('hlist');
+  l.innerHTML = '';
+  [...state.history].reverse().forEach(item => {
+    const d = document.createElement('div');
+    d.className = 'hitem';
+    const spinNote = item.spins > 1 ? ` • ⚠️ ${item.spins} spins` : ' • 1st spin ✓';
+    const spinner = item.spinner === 'napolee' ? '🩵 Napolee' : '💗 Fareedah';
+    d.innerHTML = `
+      <div class="hq">Round ${item.round} — "${item.q}"</div>
+      <div class="hm">${spinner} spun${spinNote}</div>
+      <div class="hr"><b>🩵 Napolee:</b> ${item.napolee}</div>
+      <div class="hr"><b>💗 Fareedah:</b> ${item.fareedah}</div>`;
     l.appendChild(d);
   });
 }
-function downloadLog() {
-  let txt = `💖 Napolee & Fareedah — Game Log\nDate: ${new Date().toLocaleDateString()}\n\n${'═'.repeat(42)}\n\n`;
-  history.forEach(i => txt += `Round ${i.round}\nQ: ${i.q}\n🩵 Napolee: ${i.napolee}\n💗 Fareedah: ${i.fareedah}\n\n${'─'.repeat(42)}\n\n`);
-  const b = new Blob([txt],{type:'text/plain'});
-  const u = URL.createObjectURL(b);
+
+// ════════════════════════════════════════════════
+//  DOWNLOAD
+// ════════════════════════════════════════════════
+function dlLog() {
+  let t = `💖 Napolee & Fareedah — Game Log\nDate: ${new Date().toLocaleDateString()}\n\n${'═'.repeat(42)}\n\n`;
+  state.history.forEach(i => {
+    const spinner = i.spinner === 'napolee' ? '🩵 Napolee' : '💗 Fareedah';
+    const spins = i.spins > 1 ? ` (spun ${i.spins} times)` : '';
+    t += `Round ${i.round} — Spun by ${spinner}${spins}\nQ: ${i.q}\n🩵 Napolee: ${i.napolee}\n💗 Fareedah: ${i.fareedah}\n\n${'─'.repeat(42)}\n\n`;
+  });
+  const b = new Blob([t],{type:'text/plain'}), u = URL.createObjectURL(b);
   const a = document.createElement('a'); a.href=u; a.download='napolee-fareedah-game.txt'; a.click();
   URL.revokeObjectURL(u);
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 //  UTILS
-// ═══════════════════════════════════════════════════
-function mkCode() {
-  return Array.from({length:4}, ()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
-}
+// ════════════════════════════════════════════════
 function shuffle(a) {
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  for (let i=a.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
   return a;
 }
-function showWaiting(t,s){ document.getElementById('waitingText').textContent=t; document.getElementById('waitingSub').textContent=s||''; document.getElementById('waitingOverlay').classList.add('show'); }
-function hideWaiting(){ document.getElementById('waitingOverlay').classList.remove('show'); }
-function showError(m){ const e=document.getElementById('joinError'); e.textContent=m; e.style.display='block'; setTimeout(()=>e.style.display='none',3500); }
-function showToast(m){
-  let t=document.getElementById('_toast');
-  if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--pink-deep);color:#fff;padding:11px 20px;border-radius:50px;font-family:Nunito,sans-serif;font-size:.85rem;font-weight:800;z-index:9999;box-shadow:0 4px 20px #e8799f55;opacity:0;transition:opacity .25s;white-space:nowrap;pointer-events:none;';document.body.appendChild(t);}
-  t.textContent=m;t.style.opacity='1';clearTimeout(t._x);t._x=setTimeout(()=>t.style.opacity='0',2800);
-}
-function triggerConfetti(){
-  const c=document.getElementById('confettiContainer');c.innerHTML='';
+
+function confetti() {
+  const c=document.getElementById('cc'); c.innerHTML='';
   const cols=['#f4a7c0','#e8799f','#fce4ee','#f9c6d4','#fff','#fdd5e4'];
-  for(let i=0;i<65;i++){const el=document.createElement('div');el.className='confetti-piece';const sz=6+Math.random()*8;el.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.4+Math.random()*2}s;animation-delay:${Math.random()*.4}s;`;c.appendChild(el);}
+  for(let i=0;i<65;i++){
+    const el=document.createElement('div'); el.className='cp';
+    const sz=6+Math.random()*8;
+    el.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${cols[~~(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.4+Math.random()*2}s;animation-delay:${Math.random()*.4}s;`;
+    c.appendChild(el);
+  }
   setTimeout(()=>c.innerHTML='',3200);
 }
 
-window.addEventListener('DOMContentLoaded', () => { drawWheel(0); checkForSavedGame(); });
+function toast(m) {
+  const t=document.getElementById('_t');
+  t.textContent=m; t.style.opacity='1';
+  clearTimeout(t._x); t._x=setTimeout(()=>t.style.opacity='0',2800);
+}
+
+// INIT
+window.addEventListener('DOMContentLoaded', () => {
+  drawWheel(0);
+  checkResume();
+});
+
+function toggleGuide() {
+  const body = document.getElementById('guideBody');
+  const btn = document.getElementById('guideToggle');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'flex';
+  btn.textContent = open ? 'Show ▼' : 'Hide ▲';
+}
 </script>
 
 </body>
