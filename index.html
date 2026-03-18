@@ -136,11 +136,11 @@ textarea.ta::placeholder{color:#c9a0b0}
 
 /* DONE buttons — each player has their own */
 .done-row{display:flex;gap:8px;margin-bottom:12px}
-.done-player-btn{flex:1;padding:12px 8px;border-radius:11px;border:none;font-family:‘Nunito’,sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .2s;line-height:1.3}
-.dpb1{background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;box-shadow:0 3px 12px #e8799f33}
-.dpb2{background:linear-gradient(135deg,#c0607a,#e8799f);color:#fff;box-shadow:0 3px 12px #c0607a33}
+.done-player-btn{flex:1;padding:12px 8px;border-radius:11px;border:none;font-family:‘Nunito’,sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .2s;line-height:1.3;color:#fff}
+.dpb1{background:#e8799f}
+.dpb2{background:#c0607a}
 .done-player-btn:disabled{opacity:.4;cursor:not-allowed}
-.done-player-btn.ok{background:linear-gradient(135deg,#4caf50,#81c784);box-shadow:0 3px 12px #4caf5033;pointer-events:none}
+.done-player-btn.ok{background:#4caf50;pointer-events:none}
 
 /* Status pills */
 .status-row{display:flex;gap:8px;margin-bottom:12px}
@@ -299,52 +299,52 @@ textarea.ta::placeholder{color:#c9a0b0}
     <div class="sc-warn" id="spinWarn"></div>
   </div>
 
-  <p class="smsg" id="smsg">✨ Spinning… ✨</p>
+  <p class="smsg" id="smsg">Spinning...</p>
 
-<button class="btn-spin" id="spinBtn" onclick="doSpin()">🎰 SPIN THE WHEEL</button>
+<button class="btn-spin" id="spinBtn" onclick="doSpin()">SPIN THE WHEEL</button>
 
   <!-- Question Card -->
 
   <div class="qcard" id="qcard">
-    <div class="qlbl">💬 Question</div>
+    <div class="qlbl">Question</div>
     <p class="qtxt" id="qtxt"></p>
     <div class="qmeta" id="qmeta"></div>
 
 ```
 <div class="done-row">
   <button class="done-player-btn dpb1" id="doneBtn1" onclick="markDone(1)">
-    🩵 Napolee<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>
+    Napolee<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>
   </button>
   <button class="done-player-btn dpb2" id="doneBtn2" onclick="markDone(2)">
-    💗 Fareedah<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>
+    Fareedah<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>
   </button>
 </div>
 
 <div class="status-row">
   <div class="spill" id="sp1">
-    <div class="sn">🩵 Napolee</div>
-    <div class="si" id="si1">⏳</div>
+    <div class="sn">Napolee</div>
+    <div class="si" id="si1">waiting...</div>
   </div>
   <div class="spill" id="sp2">
-    <div class="sn">💗 Fareedah</div>
-    <div class="si" id="si2">⏳</div>
+    <div class="sn">Fareedah</div>
+    <div class="si" id="si2">waiting...</div>
   </div>
 </div>
 
-<!-- Reveal answers — only after both tap done -->
+<!-- Reveal answers -->
 <div class="reveal-sec" id="revealSec">
-  <div class="rdiv"><span>Both ready! Type your answers 👇</span></div>
+  <div class="rdiv"><span>Both ready! Type your answers below</span></div>
   <div class="ans-section">
     <div class="ans-box">
-      <label class="albl" style="color:var(--dp)">🩵 Napolee's answer</label>
-      <textarea class="ta" id="a1" placeholder="Type your answer here…"></textarea>
+      <label class="albl" style="color:var(--dp)">Napolee answer</label>
+      <textarea class="ta" id="a1" placeholder="Type your answer here"></textarea>
     </div>
     <div class="ans-box">
-      <label class="albl" style="color:#c0607a">💗 Fareedah's answer</label>
-      <textarea class="ta" id="a2" placeholder="Type your answer here…"></textarea>
+      <label class="albl" style="color:#c0607a">Fareedah answer</label>
+      <textarea class="ta" id="a2" placeholder="Type your answer here"></textarea>
     </div>
   </div>
-  <button class="btn bp" onclick="submitAnswers()">Reveal Both Answers 👀</button>
+  <button class="btn bp" onclick="submitAnswers()">Reveal Both Answers</button>
 </div>
 ```
 
@@ -355,14 +355,14 @@ textarea.ta::placeholder{color:#c9a0b0}
   <div class="rcard" id="rcard">
     <p class="rq" id="rq"></p>
     <div class="rrow">
-      <div class="rname" style="color:var(--dp)">🩵 Napolee</div>
+      <div class="rname" style="color:var(--dp)">Napolee</div>
       <div class="rans" id="ra1"></div>
     </div>
     <div class="rrow">
-      <div class="rname" style="color:#c0607a">💗 Fareedah</div>
+      <div class="rname" style="color:#c0607a">Fareedah</div>
       <div class="rans" id="ra2"></div>
     </div>
-    <button class="btn bp" onclick="nextRound()" style="margin-top:10px" id="nextBtn">Next Round 🎲</button>
+    <button class="btn bp" onclick="nextRound()" style="margin-top:10px" id="nextBtn">Next Round</button>
   </div>
 
   <div class="divhr"></div>
@@ -371,12 +371,12 @@ textarea.ta::placeholder{color:#c9a0b0}
 
   <div class="hsec">
     <button class="htog" onclick="toggleH()">
-      📜 Round History (<span id="hcnt">0</span>) <span id="harr">▼</span>
+      Round History (<span id="hcnt">0</span>) <span id="harr">▼</span>
     </button>
     <div class="hlist" id="hlist"></div>
   </div>
 
-<button class="dlbtn" id="dlbtn" onclick="dlLog()">💾 Download Memory Log</button>
+<button class="dlbtn" id="dlbtn" onclick="dlLog()">Download Memory Log</button>
 
 </div>
 
@@ -737,7 +737,7 @@ function showQuestion(q, fresh) {
 
   if (count > 0) {
     scWrap.classList.add('show');
-    scBadge.textContent = count === 1 ? '1st spin ✓' : `${count} spins ⚠️`;
+    scBadge.textContent = count === 1 ? '1st spin ✓' : `${count} spins (re-spun)`;
     scBadge.style.background = count === 1 ? 'var(--dp)' : '#c0392b';
     scWarn.textContent = count > 1 ? `Spun ${count} times on this question` : '';
     document.getElementById('qmeta').textContent = count === 1
@@ -750,13 +750,13 @@ function showQuestion(q, fresh) {
     const b1 = document.getElementById('doneBtn1');
     const b2 = document.getElementById('doneBtn2');
     b1.disabled = false; b1.classList.remove('ok');
-    b1.innerHTML = '🩵 Napolee<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>';
+    b1.innerHTML = 'Napolee<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>';
     b2.disabled = false; b2.classList.remove('ok');
-    b2.innerHTML = '💗 Fareedah<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>';
+    b2.innerHTML = 'Fareedah<br><span style="font-size:.75rem;opacity:.85">I am Ready</span>';
     document.getElementById('sp1').classList.remove('done');
     document.getElementById('sp2').classList.remove('done');
-    document.getElementById('si1').textContent = '⏳';
-    document.getElementById('si2').textContent = '⏳';
+    document.getElementById('si1').textContent = 'waiting...';
+    document.getElementById('si2').textContent = 'waiting...';
     document.getElementById('revealSec').style.display = 'none';
     document.getElementById('a1').value = '';
     document.getElementById('a2').value = '';
@@ -767,7 +767,7 @@ function showQuestion(q, fresh) {
 
   // Spin button: allow respin but label changes
   document.getElementById('spinBtn').disabled = false;
-  document.getElementById('spinBtn').textContent = '🔄 Re-Spin';
+  document.getElementById('spinBtn').textContent = 'Re-Spin';
   document.getElementById('spinBtn').classList.add('respin');
 }
 
@@ -794,15 +794,15 @@ function markDoneUI(player) {
   if (player === 1) {
     const b = document.getElementById('doneBtn1');
     b.disabled = true; b.classList.add('ok');
-    b.innerHTML = '🩵 Napolee<br><span style="font-size:.75rem">Done!</span>';
+    b.innerHTML = 'Napolee<br><span style="font-size:.75rem">Done!</span>';
     document.getElementById('sp1').classList.add('done');
-    document.getElementById('si1').textContent = '✅';
+    document.getElementById('si1').textContent = 'Done!';
   } else {
     const b = document.getElementById('doneBtn2');
     b.disabled = true; b.classList.add('ok');
-    b.innerHTML = '💗 Fareedah<br><span style="font-size:.75rem">Done!</span>';
+    b.innerHTML = 'Fareedah<br><span style="font-size:.75rem">Done!</span>';
     document.getElementById('sp2').classList.add('done');
-    document.getElementById('si2').textContent = '✅';
+    document.getElementById('si2').textContent = 'Done!';
   }
 }
 
@@ -876,7 +876,7 @@ function nextRound() {
 
   // Reset spin button
   document.getElementById('spinBtn').disabled = false;
-  document.getElementById('spinBtn').textContent = '🎰 SPIN THE WHEEL';
+  document.getElementById('spinBtn').textContent = 'SPIN THE WHEEL';
   document.getElementById('spinBtn').classList.remove('respin');
 
   updateTopBar();
@@ -968,7 +968,7 @@ function toggleGuide() {
   const btn = document.getElementById('guideToggle');
   const open = body.classList.contains('open');
   body.classList.toggle('open');
-  btn.textContent = open ? 'Show ▼' : 'Hide ▲';
+  btn.textContent = open ? 'Show' : 'Hide';
 }
 </script>
 
