@@ -65,13 +65,13 @@ textarea.ta::placeholder{color:#c9a0b0}
 
 /* GUIDE CARD */
 .guide-card{background:var(–card);border:1.5px solid var(–pb);border-radius:var(–r);width:100%;max-width:440px;box-shadow:var(–shadow);overflow:hidden}
-.guide-header{display:flex;align-items:center;gap:9px;padding:16px 20px;border-bottom:1px solid var(–pb);background:var(–pl)}
+.guide-header{display:flex;align-items:center;gap:9px;padding:16px 20px;border-bottom:1px solid var(–pb);background:var(–pl);cursor:pointer}
 .guide-icon{font-size:1.1rem}
 .guide-title{font-size:.9rem;font-weight:800;color:var(–text);flex:1;letter-spacing:.3px}
-.guide-toggle{background:transparent;border:1.5px solid var(–pb);border-radius:50px;padding:5px 12px;font-family:‘Nunito’,sans-serif;font-size:.72rem;font-weight:800;color:var(–soft);cursor:pointer;transition:all .2s;white-space:nowrap}
-.guide-toggle:hover{border-color:var(–dp);color:var(–dp)}
+.guide-toggle{background:var(–card);border:1.5px solid var(–pb);border-radius:50px;padding:6px 14px;font-family:‘Nunito’,sans-serif;font-size:.72rem;font-weight:800;color:var(–dp);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
 
-.guide-body{padding:18px 20px;display:flex;flex-direction:column;gap:18px}
+.guide-body{padding:18px 20px;display:none;flex-direction:column;gap:18px}
+.guide-body.open{display:flex}
 
 /* STEPS */
 .steps{display:flex;flex-direction:column;gap:13px}
@@ -98,7 +98,8 @@ textarea.ta::placeholder{color:#c9a0b0}
 .tip-item::before{content:‘✦’;color:var(–pink);font-size:.7rem;flex-shrink:0;margin-top:2px}
 
 /* START BUTTON */
-.start-btn{padding:18px!important;font-size:1.05rem!important;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px!important}
+.start-btn{padding:18px 24px !important;font-size:1.05rem !important;display:flex !important;align-items:center;justify-content:center;gap:10px;border-radius:16px !important;background:linear-gradient(135deg,var(–dp),var(–pink)) !important;color:#fff !important;box-shadow:0 4px 20px #e8799f55 !important}
+.start-btn:active{transform:scale(.97) !important}
 .start-icon{font-size:1.3rem}
 
 /* GAME */
@@ -247,7 +248,7 @@ textarea.ta::placeholder{color:#c9a0b0}
     <div class="guide-header">
       <span class="guide-icon">📖</span>
       <span class="guide-title">How To Play</span>
-      <button class="guide-toggle" id="guideToggle" onclick="toggleGuide()">Hide ▲</button>
+      <button class="guide-toggle" id="guideToggle" onclick="toggleGuide()">Show ▼</button>
     </div>
 
 ```
@@ -1061,8 +1062,8 @@ window.addEventListener('DOMContentLoaded', () => {
 function toggleGuide() {
   const body = document.getElementById('guideBody');
   const btn = document.getElementById('guideToggle');
-  const open = body.style.display !== 'none';
-  body.style.display = open ? 'none' : 'flex';
+  const open = body.classList.contains('open');
+  body.classList.toggle('open');
   btn.textContent = open ? 'Show ▼' : 'Hide ▲';
 }
 </script>
