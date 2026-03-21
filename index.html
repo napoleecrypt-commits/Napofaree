@@ -45,44 +45,81 @@ textarea.ta::placeholder{color:#c9a0b0}
 .bo:hover{border-color:var(–dp)!important;color:var(–dp)}
 .bg{background:linear-gradient(135deg,#4caf50,#81c784);color:#fff}
 
-/* HOME */
-#home{justify-content:flex-start;padding-top:36px;gap:16px}
-.home-inner{display:flex;flex-direction:column;gap:14px;width:100%;max-width:440px}
-.home-header{text-align:center;width:100%;max-width:440px}
-.logo-hearts{font-size:2rem;margin:6px 0 4px;line-height:1}
+/* HOME — GAME UI STYLE */
+#home{justify-content:flex-start;padding:0;gap:0;min-height:100vh;background:linear-gradient(180deg,#f9b8d4 0%,#f4d0e4 40%,#fce8f3 70%,#fff0f7 100%)}
+#home::before{content:’’;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.5) 0%,transparent 60%);pointer-events:none;z-index:0}
 
-/* RESUME */
-.rbanner{background:linear-gradient(135deg,#fce4ee,#fff0f5);border:2px solid var(–pink);border-radius:16px;padding:18px;width:100%;max-width:440px;text-align:center}
-.rbanner .rb-icon{font-size:1.6rem;margin-bottom:4px}
-.rbanner .rt{font-family:‘Playfair Display’,serif;font-size:1.05rem;font-weight:700;color:var(–dp);margin-bottom:4px}
-.rbanner .rs{font-size:.78rem;color:var(–soft);margin-bottom:14px;line-height:1.6}
-.rbtns{display:flex;gap:10px}
-.rbtns button{flex:1;padding:13px;border-radius:12px;border:none;font-family:‘Nunito’,sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s}
-.rb-y{background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;box-shadow:0 3px 14px #e8799f33}
-.rb-n{background:var(–pl);color:var(–dp);border:1.5px solid var(–pb)!important}
+/* SPARKLE BG DOTS */
+.home-bg{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.home-bg span{position:absolute;border-radius:50%;background:#fff;opacity:.6;animation:sparkle 3s ease-in-out infinite}
+.home-bg span:nth-child(1){width:8px;height:8px;top:12%;left:15%;animation-delay:0s}
+.home-bg span:nth-child(2){width:6px;height:6px;top:20%;right:18%;animation-delay:.5s}
+.home-bg span:nth-child(3){width:10px;height:10px;top:8%;left:55%;animation-delay:1s}
+.home-bg span:nth-child(4){width:5px;height:5px;top:30%;left:8%;animation-delay:1.5s}
+.home-bg span:nth-child(5){width:7px;height:7px;top:15%;right:35%;animation-delay:.8s}
+@keyframes sparkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.9;transform:scale(1.5)}}
 
-/* GUIDE */
-.guide-card{background:var(–card);border:1.5px solid var(–pb);border-radius:var(–r);width:100%;max-width:440px;box-shadow:var(–shadow);overflow:hidden}
-.guide-header{display:flex;align-items:center;gap:9px;padding:14px 18px;background:var(–pl);cursor:pointer;border-radius:var(–r)}
-.guide-icon{font-size:1.1rem}
-.guide-title{font-size:.9rem;font-weight:800;color:var(–text);flex:1}
-.guide-toggle{background:#fff;border:1.5px solid var(–dp);border-radius:50px;padding:5px 14px;font-family:‘Nunito’,sans-serif;font-size:.75rem;font-weight:800;color:var(–dp);cursor:pointer;white-space:nowrap}
-.guide-body{padding:16px 18px;display:none;flex-direction:column;gap:14px}
-.guide-body.open{display:flex}
-.steps{display:flex;flex-direction:column;gap:11px}
-.step-item{display:flex;gap:11px;align-items:flex-start}
-.step-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(–dp),var(–pink));color:#fff;font-size:.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step-title{font-size:.86rem;font-weight:800;color:var(–text);margin-bottom:2px}
-.step-desc{font-size:.76rem;color:var(–soft);line-height:1.5}
-.rules-section{background:var(–pl);border:1px solid var(–pb);border-radius:12px;padding:13px}
-.rules-title{font-size:.78rem;font-weight:800;color:var(–dp);margin-bottom:9px;text-transform:uppercase;letter-spacing:.5px}
-.rule-item{display:flex;gap:8px;font-size:.76rem;color:var(–soft);line-height:1.5;margin-bottom:6px}
+/* TITLE AREA */
+.home-title-wrap{position:relative;z-index:1;text-align:center;padding:50px 20px 20px;width:100%}
+.game-title{font-family:‘Playfair Display’,serif;font-size:clamp(2.8rem,12vw,4.2rem);font-weight:900;line-height:1;color:#fff;text-shadow:0 4px 0 #d4608a,0 8px 20px #e8799f88,0 2px 0 #f9a0c0;letter-spacing:2px;display:block}
+.game-subtitle{font-family:‘Nunito’,sans-serif;font-size:clamp(1rem,4vw,1.4rem);font-weight:800;color:#fff;text-shadow:0 2px 0 #b05070,0 4px 12px #e8799f66;letter-spacing:4px;text-transform:uppercase;margin-top:6px;display:block}
+.title-hearts{font-size:2rem;display:block;margin-top:8px;animation:heartbeat 1.5s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+/* RAYS BEHIND TITLE */
+.title-rays{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:280px;height:280px;background:conic-gradient(from 0deg,transparent 0deg,rgba(255,255,255,.15) 5deg,transparent 10deg,rgba(255,255,255,.1) 15deg,transparent 20deg,rgba(255,255,255,.15) 25deg,transparent 30deg);border-radius:50%;z-index:0;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+
+/* CLOUD BOTTOM DECORATION */
+.home-cloud{position:relative;z-index:1;width:100%;height:60px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.3));margin-bottom:-10px}
+
+/* BUTTONS AREA */
+.home-btns-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 28px 20px;width:100%;max-width:420px;margin:0 auto}
+
+/* GAME STYLE BUTTON BASE */
+.game-btn{width:100%;padding:18px 24px;border-radius:50px;border:none;font-family:‘Nunito’,sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;letter-spacing:2px;text-transform:uppercase;position:relative;transition:transform .15s,box-shadow .15s;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.game-btn:active{transform:scale(.96) translateY(2px)}
+
+/* START BUTTON - GREEN */
+.btn-start-game{background:linear-gradient(180deg,#6edb6e 0%,#3cb83c 50%,#2d9e2d 100%);color:#fff;box-shadow:0 6px 0 #1e7a1e,0 8px 20px rgba(60,184,60,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-start-game:active{box-shadow:0 2px 0 #1e7a1e,0 4px 10px rgba(60,184,60,.4)}
+
+/* CONTINUE BUTTON - BLUE */
+.btn-continue-game{background:linear-gradient(180deg,#5ec8f0 0%,#2baee0 50%,#1a8fc0 100%);color:#fff;box-shadow:0 6px 0 #1070a0,0 8px 20px rgba(43,174,224,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-continue-game:active{box-shadow:0 2px 0 #1070a0,0 4px 10px rgba(43,174,224,.4)}
+
+/* GUIDE BUTTON - PINK */
+.btn-guide-game{background:linear-gradient(180deg,#f9a8cc 0%,#e8799f 50%,#d45580 100%);color:#fff;box-shadow:0 6px 0 #b03060,0 8px 20px rgba(232,121,159,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-guide-game:active{box-shadow:0 2px 0 #b03060,0 4px 10px rgba(232,121,159,.4)}
+
+/* SAVED GAME CARD */
+.saved-card{background:rgba(255,255,255,.85);border:2px solid rgba(255,255,255,.9);border-radius:20px;padding:16px 18px;width:100%;max-width:420px;text-align:center;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(232,121,159,.3);position:relative;z-index:2;margin:0 28px}
+.saved-card .rb-icon{font-size:1.4rem;margin-bottom:4px}
+.saved-card .rt{font-family:‘Playfair Display’,serif;font-size:.95rem;font-weight:700;color:#d45580;margin-bottom:3px}
+.saved-card .rs{font-size:.76rem;color:#9a6878;margin-bottom:12px;line-height:1.5}
+
+/* GUIDE PANEL */
+.guide-panel{background:rgba(255,255,255,.88);border:2px solid rgba(255,255,255,.9);border-radius:20px;width:calc(100% - 56px);max-width:420px;overflow:hidden;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(232,121,159,.25);position:relative;z-index:2;margin:0 auto}
+.guide-panel-header{display:flex;align-items:center;gap:8px;padding:13px 16px;background:linear-gradient(135deg,#fce4ee,#ffd6ea);cursor:pointer}
+.guide-panel-title{font-size:.88rem;font-weight:800;color:#d45580;flex:1}
+.guide-panel-toggle{background:#fff;border:1.5px solid #e8799f;border-radius:50px;padding:4px 12px;font-family:‘Nunito’,sans-serif;font-size:.7rem;font-weight:800;color:#e8799f;cursor:pointer}
+.guide-panel-body{padding:14px 16px;display:none;flex-direction:column;gap:12px}
+.guide-panel-body.open{display:flex}
+.steps{display:flex;flex-direction:column;gap:10px}
+.step-item{display:flex;gap:10px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#e8799f,#f4a7c0);color:#fff;font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-size:.84rem;font-weight:800;color:#3d1f2d;margin-bottom:1px}
+.step-desc{font-size:.74rem;color:#9a6878;line-height:1.45}
+.rules-section{background:#fce4ee;border:1px solid #f9c6d8;border-radius:11px;padding:11px}
+.rules-title{font-size:.76rem;font-weight:800;color:#d45580;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.rule-item{display:flex;gap:7px;font-size:.74rem;color:#9a6878;line-height:1.45;margin-bottom:5px}
 .rule-item:last-child{margin-bottom:0}
-.rule-dot{font-weight:800;color:var(–dp);flex-shrink:0}
+.rule-dot{font-weight:800;color:#e8799f;flex-shrink:0}
 
-/* START BUTTON */
-.start-btn{width:100%;max-width:440px;padding:17px;border-radius:14px;border:none;background:linear-gradient(135deg,#e8799f,#f4a7c0);color:#fff;font-family:‘Nunito’,sans-serif;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px #e8799f55;transition:all .2s;letter-spacing:.3px}
-.start-btn:active{transform:scale(.97)}
+/* HOME INNER — legacy keep */
+.home-inner{display:flex;flex-direction:column;gap:14px;width:100%;max-width:440px}
+.logo-hearts{display:none}
+.home-header{display:none}
 
 /* GAME */
 #game{padding-top:14px}
@@ -203,41 +240,40 @@ textarea.ta::placeholder{color:#c9a0b0}
 <!-- HOME -->
 
 <div class="screen active" id="home">
-
-  <div class="home-header">
-    <div class="logo">Napolee<br>&amp; Fareedah</div>
-    <div class="logo-hearts">💖</div>
-    <div class="sub">Your personal couple spin game</div>
+  <div class="home-bg"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="title-rays"></div>
+  <div class="home-title-wrap">
+    <span class="game-title">Napolee</span>
+    <span class="game-title">&amp; Fareedah</span>
+    <span class="game-subtitle">Couple Spin Game</span>
+    <span class="title-hearts">&#128150;</span>
   </div>
-
-  <!-- Resume Banner -->
-
-  <div class="rbanner" id="rbanner" style="display:none">
-    <div class="rb-icon">💾</div>
+  <div class="saved-card" id="rbanner" style="display:none">
+    <div class="rb-icon">&#128190;</div>
     <div class="rt">Saved Game Found!</div>
     <div class="rs" id="rinfo">Loading...</div>
-    <div class="rbtns">
-      <button class="rb-y" onclick="doResume()" style="background:linear-gradient(135deg,#e8799f,#f4a7c0);color:#fff;padding:13px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;flex:1">Continue</button>
-      <button class="rb-n" onclick="doNew()" style="background:#fce4ee;color:#e8799f;border:1.5px solid #f9c6d8;padding:13px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;flex:1">New Game</button>
+    <div style="display:flex;gap:10px">
+      <button class="game-btn btn-continue-game" onclick="doResume()" style="flex:1;padding:14px;font-size:.9rem">Continue</button>
+      <button class="game-btn btn-start-game" onclick="doNew()" style="flex:1;padding:14px;font-size:.9rem">New Game</button>
     </div>
   </div>
-
-  <!-- HOW TO PLAY -->
-
-  <div class="guide-card">
-    <div class="guide-header" onclick="toggleGuide()">
-      <span class="guide-icon">📖</span>
-      <span class="guide-title">How To Play</span>
-      <button class="guide-toggle" id="guideToggle">Show</button>
+  <div class="home-btns-wrap" id="homeInner">
+    <button class="game-btn btn-start-game" onclick="startFresh()">Start New Game</button>
+    <button class="game-btn btn-guide-game" onclick="toggleGuide()">How To Play</button>
+  </div>
+  <div class="guide-panel" id="guidePanel" style="display:none">
+    <div class="guide-panel-header" onclick="toggleGuide()">
+      <span class="guide-panel-title">How To Play</span>
+      <button class="guide-panel-toggle" id="guideToggle">Hide</button>
     </div>
-    <div class="guide-body" id="guideBody">
+    <div class="guide-panel-body open" id="guideBody">
       <div class="steps">
-        <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Open together</div><div class="step-desc">Both open this same link on your own phones at the same time.</div></div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Take turns spinning</div><div class="step-desc">The game shows whose turn it is. That person taps Spin and the wheel picks a question.</div></div></div>
-        <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Answer privately</div><div class="step-desc">Both answer on your own. Type it on WhatsApp or keep it in your head. Do not show each other yet.</div></div></div>
-        <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Tap your Done button</div><div class="step-desc">Tap only your own button when ready. Napolee taps the blue one, Fareedah taps the pink one. Once both tap Done the answer boxes appear.</div></div></div>
-        <div class="step-item"><div class="step-num">5</div><div class="step-content"><div class="step-title">Type and Reveal</div><div class="step-desc">Both type your answers then tap Reveal. Both answers show at the same time.</div></div></div>
-        <div class="step-item"><div class="step-num">6</div><div class="step-content"><div class="step-title">Next Round</div><div class="step-desc">Tap Next Round. The turn switches and the other person spins next.</div></div></div>
+        <div class="step-item"><div class="step-num">1</div><div><div class="step-title">Open together</div><div class="step-desc">Both open this same link on your own phones at the same time.</div></div></div>
+        <div class="step-item"><div class="step-num">2</div><div><div class="step-title">Take turns spinning</div><div class="step-desc">The game shows whose turn it is. That person taps Spin and the wheel picks a question.</div></div></div>
+        <div class="step-item"><div class="step-num">3</div><div><div class="step-title">Answer privately</div><div class="step-desc">Both answer on your own. Type it on WhatsApp or keep it in your head. Do not show each other yet.</div></div></div>
+        <div class="step-item"><div class="step-num">4</div><div><div class="step-title">Tap your Done button</div><div class="step-desc">Tap only your own button when ready. Once both tap Done the answer boxes appear.</div></div></div>
+        <div class="step-item"><div class="step-num">5</div><div><div class="step-title">Type and Reveal</div><div class="step-desc">Both type your answers then tap Reveal. Both answers show at the same time.</div></div></div>
+        <div class="step-item"><div class="step-num">6</div><div><div class="step-title">Next Round</div><div class="step-desc">Tap Next Round. The turn switches and the other person spins next.</div></div></div>
       </div>
       <div class="rules-section">
         <div class="rules-title">Rules</div>
@@ -249,13 +285,6 @@ textarea.ta::placeholder{color:#c9a0b0}
       </div>
     </div>
   </div>
-
-  <!-- START -->
-
-  <div class="home-inner" id="homeInner">
-    <button class="start-btn" onclick="startFresh()">🎰 Start New Game</button>
-  </div>
-
 </div>
 
 <!-- ══════════════════ GAME ══════════════════ -->
@@ -425,12 +454,12 @@ const ALL_Q = [
   "How important is smell or perfume when you are close to someone?",
   "What kind of body language makes someone look confident?",
   "What body language makes someone look uninterested or unattractive?",
-  "What type of smile do you personally find most attractive?",
+  "What is something people find attractive that you personally do not find attractive?",
   "What type of voice do you personally find attractive?",
   // PERSONALITY ATTRACTION
   "What personality trait instantly attracts you to someone?",
   "What personality trait instantly turns you off?",
-  "What type of confidence do you find attractive in someone?",
+  "What dressing style do you find most attractive on someone you like?",
   "What attitude toward life attracts you to someone?",
   "What personality habit annoys you the most in people?",
   "What type of humor do you enjoy the most?",
@@ -468,7 +497,7 @@ const ALL_Q = [
   "Do you prefer someone to keep their private area shaved, trimmed, or natural during intimacy?",
   "How important is cleanliness before intimate moments?",
   "What hygiene habits make intimacy more enjoyable for you?",
-  "Can body odour affect attraction or intimacy for you?",
+  "What is one thing you would love to see your partner wear more often?",
   "What grooming habits do you appreciate in a partner during intimacy?",
   "What hygiene habits do you think people should pay more attention to during intimacy?",
   // HONEST & PERSONAL
@@ -964,11 +993,11 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function toggleGuide() {
-  const body = document.getElementById('guideBody');
+  const panel = document.getElementById('guidePanel');
   const btn = document.getElementById('guideToggle');
-  const open = body.classList.contains('open');
-  body.classList.toggle('open');
-  btn.textContent = open ? 'Show' : 'Hide';
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  if (btn) btn.textContent = open ? 'Show' : 'Hide';
 }
 </script>
 
